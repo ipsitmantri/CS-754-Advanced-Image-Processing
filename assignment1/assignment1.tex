@@ -1,0 +1,181 @@
+\documentclass[12pt]{article}
+\usepackage[margin = 0.9in, top=0.8in]{geometry}
+\usepackage{graphicx}
+\usepackage{textgreek}
+\usepackage{amsmath}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage{url}
+
+\title{Assignment 1}
+\author{Shaan ul Haque - 180070053; Mantri Ipsit - 1800700}
+
+\begin{document}
+
+\maketitle
+
+\section*{Question 1:}
+\subsection*{1.a}
+We know that $\delta_{2s}$ is an increasing function of s(sparsity of signal). If we increase s, we are increasing $\delta_{2s}$ which in-turn increases $C_1$ and $C_2$ because they are increasing functions of $\delta_{2s}$ as well. Thus, both have conflicting effects so we can't assume the error bound to arbitrarily decrease as s increases. 
+\subsection*{1.b}
+Though, m(number of measurements) has no direct effect on the bound but it does have few implications on it. The measurement matrix has only m rows. If the sparsity of signal is s which is greater than m then we have:
+\begin{equation*}
+    \boldsymbol{y} = \sum_{i\epsilon\boldsymbol{S}}\boldsymbol{A_i}x_i
+\end{equation*}
+where $\boldsymbol{S}$ is the set of index where $\boldsymbol{x}$ has non-zero elements and $\boldsymbol{A_i}$ is the corresponding column. Now since s(cardinality of $\boldsymbol{S}$) is greater than m thus it is linear combination of s m-dimensional vectors which is clearly zero for some $\boldsymbol{x}$ as infinite solutions exists for such under-determined problem. Thus, the null set property of the matrix and hence RIP is lost. Thus, we must have m>s, as a necessary condition for RIP. Infact $O(slog(n/s))\leq m$, and thus the value of s cannot be increased beyond the number of rows in $\boldsymbol{A}$.
+\subsection*{1.c}
+Theorem 3 is better than theorem 3A. This is because a matrix obeying RIP for smaller bound on $\delta_{2s}$ would work fine on signals having more sparsity(smaller values of s) than a matrix whose RIC is larger. Thus, for larger $\delta_{2s}$ we can work with comparatively less sparse signals also and satisfy the BP error limit.
+\subsection*{1.d}
+If we make the error $\epsilon$ zero in BP, then we want exact relation between y and $\theta$ which is:
+\begin{align*}
+    y = \boldsymbol{\Phi\Psi\theta}
+\end{align*}
+But since the measurements are noisy in, the estimated $\theta$ from solving such problem would be incorrect. Thus, we allow some margin so that we do not over-fit our estimated $\theta$ with noisy measurements. Moreover, we see that $\epsilon$ is not some independent parameter but it depends upon the noise power, therefore it is quite unreasonable to take it as zero if noise vector is non-zero in magnitude.
+
+\section*{Question 3}
+For upper limit of the bound, we can use Cauchy-Schwartz inequality:
+\begin{equation*}
+    |\boldsymbol{\Phi^i\Psi_j}| \leq |\boldsymbol{\Phi^i}||\boldsymbol{\Psi_j}|
+\end{equation*}
+which is simply dot product of two vectors is always less than product of their magnitude. Since $\boldsymbol{\Psi}$ and $\boldsymbol{\Phi}$ are unit normalized along columns and rows respectively we have:
+\begin{equation*}
+   \max_{i,j \epsilon \{1,2,3...,n\}}|\boldsymbol{\Phi^i\Psi_j}| \leq 1
+\end{equation*}
+And thus:
+\begin{equation*}
+   \max_{i,j \epsilon \{1,2,3...,n\}}\sqrt{n}|\boldsymbol{\Phi^i\Psi_j}| \leq \sqrt{n}
+\end{equation*}
+For lower limit of the bound, we use the hint by creating a unit vector:
+\begin{equation*}
+    \boldsymbol{g} = \sum_{k=1}^{n}\alpha_k\boldsymbol{\Psi_k}
+\end{equation*}
+Since $\boldsymbol{g}$ is a unit vector we have:
+\begin{equation*}
+    \boldsymbol{g^T}\boldsymbol{g} = (\sum_{k=1}^{n}\alpha_k\boldsymbol{\Psi_k^T})(\sum_{k=1}^{n}\alpha_k\boldsymbol{\Psi_k}) = 1
+\end{equation*}
+Now, since $\boldsymbol{\Psi}$ is orthonormal, dot product of columns of $\boldsymbol{\Psi}$ is zero when columns are different and equal to 1 if they are same. Thus we get the condition:
+\begin{equation*}
+     \sum_{k=1}^{n}\alpha_k^2 = 1
+\end{equation*}
+Now coherence between two matrices $\boldsymbol{\Phi}$ and $\boldsymbol{\Psi}$ is defined as the maximum value of dot product between row vectors of $\boldsymbol{\Phi}$ and column vectors of $\boldsymbol{\Psi}$. If we take $\boldsymbol{\Phi}$ to be a vector we need maximum dot product of the vector with the columns of $\boldsymbol{\Psi}$ which in other words is:
+\begin{equation*}
+    \mu(\boldsymbol{g}, \boldsymbol{\Psi}) = \max_{j \epsilon \{1,2,3...,n\}}\sqrt{n}\frac{|\boldsymbol{g^T\Psi_j}|}{\boldsymbol{||g||_2||\Psi_j||_2}}
+\end{equation*}
+Since $\boldsymbol{g}$ is a linear combination of columns of $\boldsymbol{\Psi}$ which is orthonormal also, we get:
+\begin{equation*}
+    \mu(\boldsymbol{g}, \boldsymbol{\Psi}) =  \max_{j \epsilon \{1,2,3...,n\}}\sqrt{n}\frac{|\alpha_j|}{||\boldsymbol{g||_2}}
+\end{equation*}
+The equation finally reduces to:
+\begin{equation*}
+    \mu(\boldsymbol{g}, \boldsymbol{\Psi}) =  \max_{j \epsilon \{1,2,3...,n\}}\sqrt{n}\frac{|\alpha_j|}{\sum_{k=1}^{n}\alpha_k^2} = \max_{j \epsilon \{1,2,3...,n\}}\sqrt{n}|\alpha_j|
+\end{equation*}
+The minimum value of the above expression can only be achieved when all the elements are equal which gives the lower limit of coherence:
+\begin{equation*}
+    n\alpha^2 = 1 \implies |\alpha| = 1/\sqrt{n}
+\end{equation*}
+Thus the minimum value is $\mu(\boldsymbol{g}, \boldsymbol{\Psi}) = 1$
+
+\section*{Question 4:}
+\subsection*{4.a}
+If $\boldsymbol{x}$ is 1-sparse signal and only one measurement is taken then we won't be able to estimate $\boldsymbol{x}$ as we don't know which index element was non-zero. Whereas, if the index is known then the measurement can be divided by the value at the column of the measurement vector($n\times1$, as only one measurement is taken) corresponding to given index to uniquely determine $\boldsymbol{x}$.
+\subsection*{4.b}
+If two measurements are taken then also uniqueness is not guaranteed. Let us say some j-th index of $\boldsymbol{x}$ was non-zero while others were zero. Then we will get two measurements whose values are:
+\begin{align*}
+    m_1 = \Phi_{1j}x_j\\
+    m_2 = \Phi_{2j}x_j
+\end{align*}
+If we divide the measurements we can get ratio of $\Phi_{1j}/\Phi_{2j}$ and check which column of $\boldsymbol{\Phi}$ has elements with this ratio. The problem is, that there might be more than one column satisfying this relation which will lead to many estimations of $x_j$ and hence compromising uniqueness.
+\subsection*{4.c}
+When $\boldsymbol{x}$ is 2-sparse and three measurements are taken, then let i-th and j-th element of signal have non-zero elements:
+\begin{align*}
+    m_1 = \Phi_{1i}x_i+\Phi_{1j}x_j\\
+    m_2 = \Phi_{2i}x_i+\Phi_{2j}x_j\\
+    m_3 = \Phi_{3i}x_i+\Phi_{3j}x_j
+\end{align*}
+This equation can be re-written in more readable form as:
+\begin{align*}
+    \begin{bmatrix} 
+    m_1 \\
+    m_2 \\
+    m_3 \\
+    \end{bmatrix} =
+    \begin{bmatrix} 
+    \Phi_{1i} \\
+    \Phi_{2i} \\
+    \Phi_{3i} \\
+    \end{bmatrix}x_i +
+    \begin{bmatrix} 
+    \Phi_{1j} \\
+    \Phi_{2j} \\
+    \Phi_{3j} \\
+    \end{bmatrix}x_j
+\end{align*}
+In other words, we need to check which two columns of $\boldsymbol{\Phi}$ are co-planar with the measurement vector. Since $\boldsymbol{\Phi}$ is randomly generated matrix the chance of more than two columns of $\boldsymbol{\Phi}$ to satisfy the condition exactly is less but in some cases there might be more than one solution for $\boldsymbol{x}$. Algorithm to determine $\boldsymbol{x}$ is:
+\begin{verbatim}
+1) Pick any two measurements say 1st and 2nd.
+2) Loop over the columns of the matrix \Phi.
+3) For any column p, pick any column q such that q>p.
+4) Solve the two linear equations for x_i and x_j with coefficients from the 
+1st and 2nd row of \Phi.
+5) Put the calculated values in the third equation, i.e. with coefficients from 
+the third row and check if the calculated value is equal to m_3.
+\end{verbatim}
+If more than two columns of $\boldsymbol{\Phi}$ pass the algorithm then $\boldsymbol{x}$ is not uniquely determinable. Otherwise, calculated $x_i$ and $x_j$ are the values with the column indices as their location in $\boldsymbol{x}$.
+\subsection*{4.d}
+When $\boldsymbol{x}$ is 2-sparse and four measurements are taken, then let i-th and j-th element of signal have non-zero elements:
+\begin{align*}
+    m_1 = \Phi_{1i}x_i+\Phi_{1j}x_j\\
+    m_2 = \Phi_{2i}x_i+\Phi_{2j}x_j\\
+    m_3 = \Phi_{3i}x_i+\Phi_{3j}x_j\\
+    m_4 = \Phi_{4i}x_i+\Phi_{4j}x_j\\
+\end{align*}
+This equation can be re-written in more readable form as:
+\begin{align*}
+    \begin{bmatrix} 
+    m_1 \\
+    m_2 \\
+    m_3 \\
+    m_4 \\
+    \end{bmatrix} =
+    \begin{bmatrix} 
+    \Phi_{1i} \\
+    \Phi_{2i} \\
+    \Phi_{3i} \\
+    \Phi_{4i} \\
+    \end{bmatrix}x_i +
+    \begin{bmatrix} 
+    \Phi_{1j} \\
+    \Phi_{2j} \\
+    \Phi_{3j} \\
+    \Phi_{4j} \\
+    \end{bmatrix}x_j
+\end{align*}
+In this case, the probability that more than two columns of $\boldsymbol{\Phi}$ satisfy the above condition is even more less. But in some bizarre cases we can encounter the situation that $\boldsymbol{x}$ is not unique. We have the same algorithm as used the previous part with only one more step, that is we should put the calculated values in the fourth linear equation also and check whether the calculated values satisfy it or not.
+
+\section*{Question 6:}
+\subsection*{6.a}
+\begin{itemize}
+    \item Title - \textbf{Sparse imaging for fast electron microscopy}
+    \item Authors - \textbf{Hyrum S. Anderson}, \textbf{ Jovana Ilic-Helms}, \textbf{Brandon Rohrer}, \textbf{Jason Wheeler} and \textbf{Kurt Larson}
+    \item Place - \textbf{Sandia National Laboratories}
+    \item Link - \url{https://cfwebprod.sandia.gov/cfdocs/CompResearch/docs/1210508c.pdf}
+\end{itemize}
+\subsection*{6.b}
+The scanning electron microscope acquires image by raster sampling (images in old phones or video games using dot matrix structure) focused electron beam. At each location, electrons in the incident beam interacts with sample, producing various signals about the composition or topography of the sample’s surface. These signals are  detected and digitally assigned to the image pixel value at the corresponding sample location. The electron probe is then repositioned via electromagnetic or electrostatic deflection to the subsequent pixel location.\\
+In order to produce high-quality SEM images, long (on the order of microseconds) integration times per pixel are required to reduce noise. In many non-trivial cases detector response times and other factors necessitate very long integration time. In sum, well-engineered systems are SNR-limited in their data acquisition speed, and can require months to collect millimeters or centimeters of data for some applications.\\
+The degrees of freedom of typical electron microscope images are many fewer than the number of image pixels. Hence, they focused the electron beam at random image points and acquired some M measurements, thereby reconstructing the image using BP.
+\subsection*{6.c}
+The reconstruction technique involves minimizing TVF norm with slight variation. The equations goes as:
+\begin{align*}
+    \textbf{y} = \Phi\textbf{x}+\textbf{n}
+\end{align*}
+where \textbf{n} is noise vector $\Phi$ is is a subset of rows of identity \textbf{I} and \textbf{n} is noise with power $\sigma^2$.
+The image is obtained by solving regularized basis pursuit:
+\begin{align*}
+    \min_{x} \boldsymbol{||\Psi^Tx||_1 + ||\nabla x||_1}\\
+    s.t. \ \boldsymbol{||y - \Phi x|| \leq  \sigma^2}
+\end{align*}
+ where  $\boldsymbol{||\nabla x||_1 = \sum_i\sqrt{|\nabla_hx_i|^2+|\nabla_vx_i|^2}}$. By the low mutual coherence
+between the DCT basis and image-domain sampling, $\boldsymbol{\Psi}$ is chosen to be a block-DCT basis  with $32 \times 32$ pixel blocks. 
+\end{document}
+

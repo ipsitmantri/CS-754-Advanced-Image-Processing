@@ -5,7 +5,8 @@
 \usepackage{amsmath}
 \usepackage{float}
 \usepackage{subcaption}
-\usepackage{url}
+\usepackage{hyperref}
+
 
 \title{Assignment 1}
 \author{Shaan ul Haque - 180070053; Mantri Ipsit - 1800700}
@@ -73,7 +74,7 @@ The minimum value of the above expression can only be achieved when all the elem
 \begin{equation*}
     n\alpha^2 = 1 \implies |\alpha| = 1/\sqrt{n}
 \end{equation*}
-Thus the minimum value is $\mu(\boldsymbol{g}, \boldsymbol{\Psi}) = 1$
+This is very clear to see, let us assume if we decrease one of the parameters from $1/\sqrt{n}$ a little bit then other parameters will have to increase in order to satisfy the unit magnitude constraint and when max is taken across all elements then we will get some value greater than $1/\sqrt{n}$, whereas if we increase one of the parameters then others will have to decrease and max across all of them will again increase. Thus the minimum value is $\mu(\boldsymbol{g}, \boldsymbol{\Psi}) = 1$ when, $\boldsymbol{g} = 1/\sqrt{n}\sum_{k=1}^{n}\boldsymbol{\Psi_k}$
 
 \section*{Question 4:}
 \subsection*{4.a}
@@ -158,7 +159,7 @@ In this case, the probability that more than two columns of $\boldsymbol{\Phi}$ 
     \item Title - \textbf{Sparse imaging for fast electron microscopy}
     \item Authors - \textbf{Hyrum S. Anderson}, \textbf{ Jovana Ilic-Helms}, \textbf{Brandon Rohrer}, \textbf{Jason Wheeler} and \textbf{Kurt Larson}
     \item Place - \textbf{Sandia National Laboratories}
-    \item Link - \url{https://cfwebprod.sandia.gov/cfdocs/CompResearch/docs/1210508c.pdf}
+    \item Link - \href{https://cfwebprod.sandia.gov/cfdocs/CompResearch/docs/1210508c.pdf}{https://cfwebprod.sandia.gov/cfdocs/CompResearch/docs/1210508c.pdf}
 \end{itemize}
 \subsection*{6.b}
 The scanning electron microscope acquires image by raster sampling (images in old phones or video games using dot matrix structure) focused electron beam. At each location, electrons in the incident beam interacts with sample, producing various signals about the composition or topography of the sample’s surface. These signals are  detected and digitally assigned to the image pixel value at the corresponding sample location. The electron probe is then repositioned via electromagnetic or electrostatic deflection to the subsequent pixel location.\\
@@ -178,4 +179,3 @@ The image is obtained by solving regularized basis pursuit:
  where  $\boldsymbol{||\nabla x||_1 = \sum_i\sqrt{|\nabla_hx_i|^2+|\nabla_vx_i|^2}}$. By the low mutual coherence
 between the DCT basis and image-domain sampling, $\boldsymbol{\Psi}$ is chosen to be a block-DCT basis  with $32 \times 32$ pixel blocks. 
 \end{document}
-

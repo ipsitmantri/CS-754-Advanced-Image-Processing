@@ -1,0 +1,153 @@
+%% Question 2
+clc; clear all; close all;
+addpath("./MMread");
+tic;
+%% T = 3;
+T = 3;
+cars = mmread('../data/cars.avi', 1:T);
+H = cars.height;
+W = cars.width;
+E = zeros(H, W, T);
+for t=1:T
+    E(:,:,t) = im2double(rgb2gray(cars.frames(t).cdata));
+end
+E = E(end-120:end,end-240:end,:);
+H = size(E, 1);
+W = size(E, 2);
+
+S = randi([0,1], H, W, T);
+I = S .* E;
+I = sum(I, 3);
+sigma = 2;
+N = normrnd(0, sigma/255, H, W);
+I_plus_N = I + N;
+figure();
+imshow(mat2gray(I_plus_N));
+title("Snapshot with Noise");
+daspect([1 1 1]);
+axis tight;
+
+I_reconstructed = omp_video_reconstruction(I_plus_N, S, 8, T, 0.1);
+%% Plotting Cars for T = 3
+for t=1:T
+    figure();
+    montage([mat2gray(E(:,:,t)), I_reconstructed(:,:,t)],"ThumbnailSize", []);
+    axis tight;
+    daspect([1 1 1]);
+    title("T = "+ t);
+end
+%% RMSE for T = 3
+rmse = mean((I_reconstructed - E).^2,'all') / mean(E.^2, 'all');
+fprintf("rmse = %0.4f \n", rmse);
+%% T = 5;
+T = 5;
+cars = mmread('../data/cars.avi', 1:T);
+H = cars.height;
+W = cars.width;
+E = zeros(H, W, T);
+for t=1:T
+    E(:,:,t) = im2double(rgb2gray(cars.frames(t).cdata));
+end
+E = E(end-120:end,end-240:end,:);
+H = size(E, 1);
+W = size(E, 2);
+
+S = randi([0,1], H, W, T);
+I = S .* E;
+I = sum(I, 3);
+sigma = 2;
+N = normrnd(0, sigma/255, H, W);
+I_plus_N = I + N;
+figure();
+imshow(mat2gray(I_plus_N));
+title("Snapshot with Noise");
+daspect([1 1 1]);
+axis tight;
+
+I_reconstructed = omp_video_reconstruction(I_plus_N, S, 8, T, 0.1);
+%% Plotting Cars for T = 5
+for t=1:T
+    figure();
+    montage([mat2gray(E(:,:,t)), I_reconstructed(:,:,t)],"ThumbnailSize", []);
+    axis tight;
+    daspect([1 1 1]);
+    title("T = "+ t);
+end
+%% RMSE for T = 5
+rmse = mean((I_reconstructed - E).^2,'all') / mean(E.^2, 'all');
+fprintf("rmse = %0.4f \n", rmse);
+%% T = 7;
+T = 7;
+cars = mmread('../data/cars.avi', 1:T);
+H = cars.height;
+W = cars.width;
+E = zeros(H, W, T);
+for t=1:T
+    E(:,:,t) = im2double(rgb2gray(cars.frames(t).cdata));
+end
+E = E(end-120:end,end-240:end,:);
+H = size(E, 1);
+W = size(E, 2);
+
+S = randi([0,1], H, W, T);
+I = S .* E;
+I = sum(I, 3);
+sigma = 2;
+N = normrnd(0, sigma/255, H, W);
+I_plus_N = I + N;
+figure();
+imshow(mat2gray(I_plus_N));
+title("Snapshot with Noise");
+daspect([1 1 1]);
+axis tight;
+
+I_reconstructed = omp_video_reconstruction(I_plus_N, S, 8, T, 0.1);
+%% Plotting Cars for T = 7
+for t=1:T
+    figure();
+    montage([mat2gray(E(:,:,t)), I_reconstructed(:,:,t)],"ThumbnailSize", []);
+    axis tight;
+    daspect([1 1 1]);
+    title("T = "+ t);
+end
+%% RMSE for T = 7
+rmse = mean((I_reconstructed - E).^2,'all') / mean(E.^2, 'all');
+fprintf("rmse = %0.4f \n", rmse);
+%% Flame
+T = 5;
+cars = mmread('../data/flame.avi', 1:T);
+H = cars.height;
+W = cars.width;
+E = zeros(H, W, T);
+for t=1:T
+    E(:,:,t) = im2double(rgb2gray(cars.frames(t).cdata));
+end
+H = size(E, 1);
+W = size(E, 2);
+
+S = randi([0,1], H, W, T);
+I = S .* E;
+I = sum(I, 3);
+sigma = 2;
+N = normrnd(0, sigma/255, H, W);
+I_plus_N = I + N;
+figure();
+imshow(mat2gray(I_plus_N));
+title("Snapshot with Noise");
+daspect([1 1 1]);
+axis tight;
+
+I_reconstructed = omp_video_reconstruction(I_plus_N, S, 8, T, 0.1);
+%% Plotting Flames for T = 5
+for t=1:T
+    figure();
+    montage([mat2gray(E(:,:,t)), I_reconstructed(:,:,t)],"ThumbnailSize", []);
+    axis tight;
+    daspect([1 1 1]);
+    title("T = "+ t);
+end
+%% RMSE for flame
+rmse = mean((I_reconstructed - E).^2,'all') / mean(E.^2, 'all');
+fprintf("rmse = %0.4f \n", rmse);
+%%
+toc;

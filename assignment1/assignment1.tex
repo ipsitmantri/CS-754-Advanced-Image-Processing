@@ -302,9 +302,9 @@ In other words, we need to check which two columns of $\boldsymbol{\Phi}$ are co
 \begin{verbatim}
 1) Pick any two measurements say 1st and 2nd.
 2) Loop over the columns of the matrix \Phi.
-3) For any column p, pick any column q such that q>p.
+3) For any column p, pick any column q such that q>p, for all such q.
 4) Solve the two linear equations for x_i and x_j with coefficients from the 
-1st and 2nd row of \Phi.
+1st and 2nd row of \Phi_p and \Phi_q.
 5) Put the calculated values in the third equation, i.e. with coefficients from 
 the third row and check if the calculated value is equal to m_3.
 \end{verbatim}
@@ -385,9 +385,9 @@ The degrees of freedom of typical electron microscope images are many fewer than
 \subsection*{6.c}
 The reconstruction technique involves minimizing TVF norm with slight variation. The equations goes as:
 \begin{align*}
-    \textbf{y} = \Phi\textbf{x}+\textbf{n}
+    \boldsymbol{\textbf{y} = \Phi\textbf{x}+\textbf{n}}
 \end{align*}
-where \textbf{n} is noise vector $\Phi$ is is a subset of rows of identity \textbf{I} and \textbf{n} is noise with power $\sigma^2$.
+where \textbf{n} is noise vector $\bold\Phi$ is is a subset of rows of identity \textbf{I} and \textbf{n} is noise with power $\sigma^2$.
 The image is obtained by solving regularized basis pursuit:
 \begin{align*}
     \min_{x} \boldsymbol{||\Psi^Tx||_1 + ||\nabla x||_1}\\

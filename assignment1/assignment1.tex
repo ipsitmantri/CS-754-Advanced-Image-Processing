@@ -85,9 +85,9 @@ $$\psi_n = \text{2D DCT Basis Matrix of size } n \times n$$
 $$x \in \mathbb{R}^{64T}, \text{ sparse}$$
 $$b \in \mathbb{R}^{64}$$
 Let $\theta^*$ be the optimal solution of the problem P0: $\min \: \left\lVert\theta\right\rVert_0$ such that $\left \lVert y - A \theta\right \rVert_2^2 \leq \epsilon, A = \Phi \Psi$.
-Let the solution obtained using OMP be $\hat{\theta}$. Then we have the error as
+Let the solution obtained using OMP be $\hat{\theta}$. Then we have the squared error as
 \begin{eqnarray*}
-E &=& \left \lVert \theta^* - \hat{\theta}\right \rVert^2\\
+E &=& \left \lVert \theta^* - \hat{\theta}\right \rVert^2_2\\
 &=& (\theta^* - \hat{\theta})^T\: (\theta^* - \hat{\theta})\\
 &=& (A^TA)^{-1} (A\theta^* - A\hat{\theta})^T \: (A\theta^* - A\hat{\theta})\\
 &=& (A^TA)^{-1} \bigg((y - A\hat{\theta}) - (y - A\theta^*)\bigg)^T\: \bigg((y - A\hat{\theta}) - (y - A\theta^*)\bigg)\\

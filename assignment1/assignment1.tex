@@ -27,7 +27,7 @@ Though, m(number of measurements) has no direct effect on the bound but it does 
 \begin{equation*}
     \boldsymbol{y} = \sum_{i\epsilon\boldsymbol{S}}\boldsymbol{A_i}x_i
 \end{equation*}
-where $\boldsymbol{S}$ is the set of index where $\boldsymbol{x}$ has non-zero elements and $\boldsymbol{A_i}$ is the corresponding column. Now since s(cardinality of $\boldsymbol{S}$) is greater than m thus it is linear combination of s m-dimensional vectors which is clearly zero for some $\boldsymbol{x}$ as infinite solutions exists for such under-determined problem. Thus, the null set property of the matrix and hence RIP is lost. Thus, we must have m>s, as a necessary condition for RIP. Infact $O(slog(n/s))\leq m$, and thus the value of s cannot be increased beyond the number of rows in $\boldsymbol{A}$.
+where $\boldsymbol{S}$ is the set of index where $\boldsymbol{x}$ has non-zero elements and $\boldsymbol{A_i}$ is the corresponding column. Now since s(cardinality of $\boldsymbol{S}$) is greater than m thus it is linear combination of s m-dimensional vectors which is clearly zero for some $\boldsymbol{x}$ as infinite solutions exists for such under-determined problem. Thus, the null set property of the matrix and hence RIP is lost. Thus, we must have $m>s$, as a necessary condition for RIP. Infact $O(slog(n/s))\leq m$, and thus the value of s cannot be increased beyond the number of rows in $\boldsymbol{A}$.
 \subsection*{1.c}
 Theorem 3 is better than theorem 3A. This is because a matrix obeying RIP for smaller bound on $\delta_{2s}$ would work fine on signals having more sparsity(smaller values of s) than a matrix whose RIC is larger. Thus, for larger $\delta_{2s}$ we can work with comparatively less sparse signals also and satisfy the BP error limit.
 \subsection*{1.d}
@@ -85,9 +85,9 @@ $$\psi_n = \text{2D DCT Basis Matrix of size } n \times n$$
 $$x \in \mathbb{R}^{64T}, \text{ sparse}$$
 $$b \in \mathbb{R}^{64}$$
 Let $\theta^*$ be the optimal solution of the problem P0: $\min \: \left\lVert\theta\right\rVert_0$ such that $\left \lVert y - A \theta\right \rVert_2^2 \leq \epsilon, A = \Phi \Psi$.
-Let the solution obtained using OMP be $\hat{\theta}$. Then we have the squared error as
+Let the solution obtained using OMP be $\hat{\theta}$. Then we have the error as
 \begin{eqnarray*}
-E &=& \left \lVert \theta^* - \hat{\theta}\right \rVert^2_2\\
+E &=& \left \lVert \theta^* - \hat{\theta}\right \rVert^2\\
 &=& (\theta^* - \hat{\theta})^T\: (\theta^* - \hat{\theta})\\
 &=& (A^TA)^{-1} (A\theta^* - A\hat{\theta})^T \: (A\theta^* - A\hat{\theta})\\
 &=& (A^TA)^{-1} \bigg((y - A\hat{\theta}) - (y - A\theta^*)\bigg)^T\: \bigg((y - A\hat{\theta}) - (y - A\theta^*)\bigg)\\
@@ -267,7 +267,7 @@ This is very clear to see, let us assume if we decrease one of the parameters fr
 \subsection*{4.a}
 If $\boldsymbol{x}$ is 1-sparse signal and only one measurement is taken then we won't be able to estimate $\boldsymbol{x}$ as we don't know which index element was non-zero. Whereas, if the index is known then the measurement can be divided by the value at the column of the measurement vector($n\times1$, as only one measurement is taken) corresponding to given index to uniquely determine $\boldsymbol{x}$.
 \subsection*{4.b}
-If two measurements are taken then also uniqueness is not guaranteed. Let us say some j-th index of $\boldsymbol{x}$ was non-zero while others were zero. Then we will get two measurements whose values are:
+If two measurements are taken then also uniqueness is not guaranteed but we might get unique solution in special cases. Let us say some j-th index of $\boldsymbol{x}$ was non-zero while others were zero. Then we will get two measurements whose values are:
 \begin{align*}
     m_1 = \Phi_{1j}x_j\\
     m_2 = \Phi_{2j}x_j
@@ -298,17 +298,59 @@ This equation can be re-written in more readable form as:
     \Phi_{3j} \\
     \end{bmatrix}x_j
 \end{align*}
-In other words, we need to check which two columns of $\boldsymbol{\Phi}$ are co-planar with the measurement vector. Since $\boldsymbol{\Phi}$ is randomly generated matrix the chance of more than two columns of $\boldsymbol{\Phi}$ to satisfy the condition exactly is less but in some cases there might be more than one solution for $\boldsymbol{x}$. Algorithm to determine $\boldsymbol{x}$ is:
-\begin{verbatim}
-1) Pick any two measurements say 1st and 2nd.
-2) Loop over the columns of the matrix \Phi.
-3) For any column p, pick any column q such that q>p, for all such q.
-4) Solve the two linear equations for x_i and x_j with coefficients from the 
-1st and 2nd row of \Phi_p and \Phi_q.
-5) Put the calculated values in the third equation, i.e. with coefficients from 
-the third row and check if the calculated value is equal to m_3.
-\end{verbatim}
-If more than two columns of $\boldsymbol{\Phi}$ pass the algorithm then $\boldsymbol{x}$ is not uniquely determinable. Otherwise, calculated $x_i$ and $x_j$ are the values with the column indices as their location in $\boldsymbol{x}$.
+In other words, we need to check which two columns of $\boldsymbol{\Phi}$ are co-planar with the measurement vector. But here we have a problem, which is not such $\boldsymbol{\Phi}$ exists where this condition is satisfied by only two columns because any four 3-D vectors have to be linearly dependent. This is explained below:
+\begin{align*}
+    \begin{bmatrix} 
+    \Phi_{1p} \\
+    \Phi_{2p} \\
+    \Phi_{3p} \\
+    \end{bmatrix}x_p +
+    \begin{bmatrix} 
+    \Phi_{1q} \\
+    \Phi_{2q} \\
+    \Phi_{3q} \\
+    \end{bmatrix}x_q +
+    \begin{bmatrix} 
+    \Phi_{1r} \\
+    \Phi_{2r} \\
+    \Phi_{3r} \\
+    \end{bmatrix}x_r +
+    \begin{bmatrix} 
+    \Phi_{1s} \\
+    \Phi_{2s} \\
+    \Phi_{3s} \\
+    \end{bmatrix}x_s = 0
+\end{align*}
+Thus measurement vector can always be written in two forms for any four set of 3-D vectors which is:
+\begin{align*}
+    \begin{bmatrix} 
+    m_1 \\
+    m_2 \\
+    m_3 \\
+    \end{bmatrix} =
+    \begin{bmatrix} 
+    \Phi_{1i} \\
+    \Phi_{2i} \\
+    \Phi_{3i} \\
+    \end{bmatrix}x_i +
+    \begin{bmatrix} 
+    \Phi_{1j} \\
+    \Phi_{2j} \\
+    \Phi_{3j} \\
+    \end{bmatrix}x_j = 
+    -\begin{bmatrix} 
+    \Phi_{1k} \\
+    \Phi_{2k} \\
+    \Phi_{3k} \\
+    \end{bmatrix}x_k -
+    \begin{bmatrix} 
+    \Phi_{1l} \\
+    \Phi_{2l} \\
+    \Phi_{3l} \\
+    \end{bmatrix}x_l 
+\end{align*}
+We see for $x_i$ and $x_j$ we can always cook up some $x_k$ and $x_l$ such that the above constraint gets satisfied. Hence, no such instance of $\boldsymbol{\Phi}$ is there where $\boldsymbol{x}$ can be uniquely estimated.
+
 \subsection*{4.d}
 When $\boldsymbol{x}$ is 2-sparse and four measurements are taken, then let i-th and j-th element of signal have non-zero elements:
 \begin{align*}
@@ -338,7 +380,20 @@ This equation can be re-written in more readable form as:
     \Phi_{4j} \\
     \end{bmatrix}x_j
 \end{align*}
-In this case, the probability that more than two columns of $\boldsymbol{\Phi}$ satisfy the above condition is even more less. But in some bizarre cases we can encounter the situation that $\boldsymbol{x}$ is not unique. We have the same algorithm as used the previous part with only one more step, that is we should put the calculated values in the fourth linear equation also and check whether the calculated values satisfy it or not.
+In this case previous situation does not arise as four vectors in 4-D can be linearly independent. Hence we need to check which two columns of $\boldsymbol{\Phi}$ are co-planar with measurement vector. But there might be a coincidence that more than two columns of $\boldsymbol{\Phi}$ are co-planar with measurement vector in which unique estimation of $\boldsymbol{x}$ is not possible. Nevertheless, since $\boldsymbol{\Phi}$ is randomly generated matrix the chance of more than two columns of $\boldsymbol{\Phi}$ to satisfy the condition exactly is less but in some cases there might be more than one solution for $\boldsymbol{x}$. Algorithm to determine $\boldsymbol{x}$ is:
+\begin{verbatim}
+1) Pick any two measurements say 1st and 2nd.
+2) Loop over the columns of the matrix \Phi.
+3) For any column p, pick any column q such that q>p, for all such q.
+4) Solve the two linear equations for x_i and x_j with coefficients from the 
+1st and 2nd row of \Phi_p and \Phi_q.
+5) Put the calculated values in the third equation and fourth equation, i.e. 
+with coefficients from the third and fouth row and check if the calculated value 
+is equal to m_3.
+\end{verbatim}
+If more than two columns of $\boldsymbol{\Phi}$ pass the algorithm then $\boldsymbol{x}$ is not uniquely determinable. Otherwise, calculated $x_i$ and $x_j$ are the values with the column indices as their location in $\boldsymbol{x}$.
+\clearpage
+
 \section*{Question 5}
 \subsection*{5.a}
 Both the papers use sensors to compute coded snapshots. Hitomi's paper changes the code for each frame by sending signals to sensors directly whereas CACTI uses mechanical translation to compute a coded snapshot for several frames. Making uses of mechanics helps in reducing the power consumption and operating bandwidth of the camera. CACTI captures an object's spatiotemporal-multiplexed information. This mechanical translation helps in compressing temporal sampling without substantially increasing system volume or power. \\

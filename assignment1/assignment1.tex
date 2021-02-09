@@ -84,24 +84,21 @@ $$\Psi = I_{T} \:\otimes \psi_{64,64} \: \otimes\: \psi_{64,64}$$
 $$\psi_n = \text{2D DCT Basis Matrix of size } n \times n$$
 $$x \in \mathbb{R}^{64T}, \text{ sparse}$$
 $$b \in \mathbb{R}^{64}$$
-Let $\theta^*$ be the optimal solution of the problem P0: $\min \: \left\lVert\theta\right\rVert_0$ such that $\left \lVert y - A \theta\right \rVert_2^2 \leq \epsilon, A = \Phi \Psi$.
-Let the solution obtained using OMP be $\hat{\theta}$. Then we have the error as
+Let $\theta^*$ be the optimal solution of the problem P0: $\min \: \left\lVert\theta\right\rVert_0$ such that $\left \lVert y - A \theta\right \rVert_2 \leq \epsilon, A = \Phi \Psi$.
+Let the solution obtained using OMP be $\hat{\theta}$. Then we have the squared error as
 \begin{eqnarray*}
-E &=& \left \lVert \theta^* - \hat{\theta}\right \rVert^2\\
+E^2 &=& \left \lVert \theta^* - \hat{\theta}\right \rVert^2\\
 &=& (\theta^* - \hat{\theta})^T\: (\theta^* - \hat{\theta})\\
 &=& (A^TA)^{-1} (A\theta^* - A\hat{\theta})^T \: (A\theta^* - A\hat{\theta})\\
 &=& (A^TA)^{-1} \bigg((y - A\hat{\theta}) - (y - A\theta^*)\bigg)^T\: \bigg((y - A\hat{\theta}) - (y - A\theta^*)\bigg)\\
-&=& (A^TA)^{-1}\: 4\epsilon\\
-&=& \frac{4\epsilon}{\left\lVert A \right \rVert^2}
+&=& (A^TA)^{-1}\: 4\epsilon^2\\
+&=& \frac{4\epsilon^2}{\left\lVert A \right \rVert^2}
 \end{eqnarray*}
+Hence the error will be
+$$E = \frac{2\epsilon}{\left\lVert A \right \rVert}$$
 \subsection*{2.e}
 For $T=3$, the relative mean squared error that we obtained is 0.0112.
 The reconstruction for $T=3$ is as follows:
-\vspace{2cm}
-\begin{center}
-	\textit{Please turn over}
-\end{center}
-\newpage
 \begin{figure}[ht]
 	\centering
 	\includegraphics[scale=1]{3_1.png}
@@ -112,6 +109,7 @@ The reconstruction for $T=3$ is as follows:
 	\includegraphics[scale=1]{3_2.png}
 	\caption{$t = 2$, Left - Original, Right - Reconstructed}
 \end{figure}
+\newpage
 \begin{figure}[ht]
 	\centering
 	\includegraphics[scale=1]{3_3.png}
@@ -184,10 +182,10 @@ The relative mean squared error value for $T = 5$ is 0.0194 and for $T = 7$ is 0
 \caption{Left - Original, Right - Reconstructed}
 \end{figure}
 \subsection*{2.g}
-We have extracted a portion of about $120 \times 240$ around the lower right corner of every frame to save time. Hence, all our result correspond to this part. 
+We have extracted a portion of about $120 \times 240$ around the lower right corner of every frame to save time. Hence, all our results correspond to this part. 
 \newpage
 \subsection*{2.h}
-We have used the first 5 frames of the `flame' video to do the experiment. We got an relative mean squared error of 0.0010.
+We have used the first 5 frames of the `flame' video to do the experiment. We got a relative mean squared error of 0.0010.
 \begin{figure}[ht]
 	\centering
 	\includegraphics[scale=1]{flame_coded_snapshot.png}
@@ -398,12 +396,16 @@ If more than two columns of $\boldsymbol{\Phi}$ pass the algorithm then $\boldsy
 \subsection*{5.a}
 Both the papers use sensors to compute coded snapshots. Hitomi's paper changes the code for each frame by sending signals to sensors directly whereas CACTI uses mechanical translation to compute a coded snapshot for several frames. Making uses of mechanics helps in reducing the power consumption and operating bandwidth of the camera. CACTI captures an object's spatiotemporal-multiplexed information. This mechanical translation helps in compressing temporal sampling without substantially increasing system volume or power. \\
 The main difference between Hitomi's and CACTI is that Hitomi's paper tries to achieve  high spatial and spectral resolution whereas CACTI tries to achieve high spatial, spectral and temporal resolution by using the fact that the information present in natural images are highly correlated. In Hitomi's, the code/mask is fixed for an integration time whereas in CACTI, the mask changes continuously.
-\newpage
 \begin{figure}[ht]
 	\centering
 	\includegraphics[scale=0.75]{CACTI.png}
 	\caption{CACTI}
 \end{figure}
+\vspace{2cm}
+\begin{center}
+	\textit{Please turn over}
+\end{center}
+\newpage
 \begin{figure}[ht]
 	\centering
 	\includegraphics[scale=0.75]{Hitomi.png}
@@ -416,7 +418,7 @@ Here, for an $N$-pixel active sensor area,
 \begin{itemize}
 \item $\mathbf{g} \in \mathbb{R}^N$ is the sensed data
 \item $\mathbf{f} \in \mathbb{R}^{\sqrt{N} \times \sqrt{N} \times N_F}$ is a $(\sqrt{N} \times \sqrt{N}) \times N_F$ voxel spatiotemporal datacube i.e., the scene.
-\item $\mathbf{H} \in \mathbb{R}^{N\times NN_F}$ s the system’s discrete forward matrix that accounts for sampling factors
+\item $\mathbf{H} \in \mathbb{R}^{N\times NN_F}$ is the system’s discrete forward matrix that accounts for sampling factors
 including the optical impulse response, pixel sampling function, and time-varying transmission
 function. The forward matrix is a 2-dimensional representation of the 3-dimensional transmission function $\mathbf{T}$
 $$\mathbf{H}_k \stackrel{\text{def}}{=} \text{diag} \bigg[T_{1,1,k}, T_{2,1,k}, \cdots, T_{\sqrt{N}, \sqrt{N}, k}\bigg], \:\: k = 1, \ldots, N_F$$

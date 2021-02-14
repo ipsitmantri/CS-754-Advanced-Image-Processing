@@ -1,0 +1,47 @@
+\title{Assignment 2: CS 754, Advanced Image Processing}
+\author{}
+\date{Due: 22nd Feb before 11:55 pm}
+
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,soul}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{ulem}
+\usepackage[margin=0.5in]{geometry}
+\begin{document}
+\maketitle
+
+\textbf{Remember the honor code while submitting this (and every other) assignment. All members of the group should work on and \emph{understand} all parts of the assignment. We will adopt a \textbf{zero-tolerance policy} against any violation.}
+\\
+\\
+\textbf{Submission instructions:} You should ideally type out all the answers in Word (with the equation editor) or using Latex. In either case, prepare a pdf file. Create a single zip or rar file containing the report, code and sample outputs and name it as follows: A2-IdNumberOfFirstStudent-IdNumberOfSecondStudent.zip. (If you are doing the assignment alone, the name of the zip file is A2-IdNumber.zip). Upload the file on moodle BEFORE 11:55 pm on 22nd Feb. No assignments will be accepted after a cutoff deadline of 10 am on 23rd Feb. Note that only one student per group should upload their work on moodle. Please preserve a copy of all your work until the end of the semester. \emph{If you have difficulties, please do not hesitate to seek help from me.} 
+
+\begin{enumerate}
+\item Refer to a copy of the paper `The restricted isometry property and its implications for compressed sensing' in the homework folder. Your task is to open the paper and answer the question posed in each and every green-colored highlight. The task is the complete proof of Theorem 3 done in class. \textsf{[24 points = 1.5 points for each of the 16 questions]}
+
+\item Your task here is to implement the ISTA algorithm for the following three cases:
+\begin{enumerate}
+\item Consider the image from the homework folder. Add iid Gaussian noise of mean 0 and variance 4 (on a [0,255] scale) to it, using the `randn' function in MATLAB. Thus $\boldsymbol{y} = \boldsymbol{x} + \boldsymbol{\eta}$ where $\boldsymbol{\eta} \sim \mathcal{N}(0,4)$. You should obtain $\boldsymbol{x}$ from $\boldsymbol{y}$ using the fact that patches from $\boldsymbol{x}$ have a sparse or near-sparse representation in the 2D-DCT basis. 
+\item Divide the image shared in the homework folder into patches of size $8 \times 8$. Let $\boldsymbol{x_i}$ be the vectorized version of the $i^{th}$ patch. Consider the measurement $\boldsymbol{y_i} = \boldsymbol{\Phi x_i}$ where $\boldsymbol{\Phi}$ is a $32 \times 64$ matrix with entries drawn iid from $\mathcal{N}(0,1)$. Note that $\boldsymbol{x_i}$ has a near-sparse representation in the 2D-DCT basis $\boldsymbol{U}$ which is computed in MATLAB as `kron(dctmtx(8)',dctmtx(8)')'. In other words, $\boldsymbol{x_i} = \boldsymbol{U \theta_i}$ where $\boldsymbol{\theta_i}$ is a near-sparse vector. Your job is to reconstruct each $\boldsymbol{x_i}$ given $\boldsymbol{y_i}$ and $\boldsymbol{\Phi}$ using ISTA. Then you should reconstruct the image by averaging the overlapping patches. You should choose the $\alpha$ parameter in the ISTA algorithm judiciously. Choose $\lambda = 1$ (for a [0,255] image). Display the reconstructed image in your report. State the RMSE given as $\|X(:)-\hat{X}(:)\|_2/\|X(:)\|_2$ where $\hat{X}$ is the reconstructed image and $X$ is the true image. \textsf{[16 points]}
+\item Repeat the reconstruction task using the Haar wavelet basis via the MATLAB command `dwt2' with the option `db1'. Display the reconstructed image in your report. State the RMSE. Use MATLAB function handles carefully. \textsf{[8 points]}
+\item Consider a 100-dimensional sparse signal $\boldsymbol{x}$ containing 10 non-zero elements. Let this signal be convolved with a kernel $\boldsymbol{h} = [1,2,3,4,3,2,1]/16$ followed by addition of Gaussian noise of standard deviation equal to 5\% of the magnitude of $\boldsymbol{x}$ to yield signal $\boldsymbol{y}$, i.e. $\boldsymbol{y} = \boldsymbol{h}*\boldsymbol{x} + \boldsymbol{\eta}$. Your job is to reconstruct $\boldsymbol{x}$ from $\boldsymbol{y}$ given $\boldsymbol{h}$. Be careful of how you create the matrix $\boldsymbol{A}$ in the ISTA algorithm. \textsf{[8 points]}
+\end{enumerate}
+
+\item One of the questions that came up in a live session was the notion of an oracle. Consider compressive measurements $\boldsymbol{y} = \boldsymbol{\Phi x} + \boldsymbol{\eta}$ of a purely sparse signal $\boldsymbol{x}$, where $\|\boldsymbol{\eta}\|_2 \leq \epsilon$. When we studied Theorem 3 in class, I had made a statement that the solution provided by the basis pursuit problem for a purely sparse signal comes very close (i.e. has an error that is only a constant factor worse than) an oracular solution. An oracular solution is defined as the solution that we could obtain if we knew in advance the indices (set $S$) the non-zero elements of the signal $\boldsymbol{x}$. This homework problem is to understand my statement better. For this, do as follows. In the following, we will assume that the inverse of $\boldsymbol{\Phi^T_S \Phi_S}$ exists, where $\boldsymbol{\Phi_S}$ is a submatrix of $\boldsymbol{\Phi}$ with columns belonging to indices in $S$.
+\begin{enumerate}
+\item Express the oracular solution $\boldsymbol{\tilde{x}}$ using a pseudo-inverse of the sub-matrix $\boldsymbol{\Phi_S}$. \textsf{[5 points]}
+\item Now, show that $\|\boldsymbol{\tilde{x}}-\boldsymbol{x}\|_2 = \|\boldsymbol{\Phi^{\dagger}_S \eta}\|_2 \leq \|\boldsymbol{\Phi^{\dagger}_S}\|_2 \|\boldsymbol{\eta}\|_2$. 
+Here $\boldsymbol{\Phi^{\dagger}_S} \triangleq (\boldsymbol{\Phi^T_S \Phi_S})^{-1} \boldsymbol{\Phi^T_S }$ is standard notation for the pseudo-inverse of $\boldsymbol{\Phi_S}$. The largest singular value of matrix $\boldsymbol{X}$ is denoted as $\|\boldsymbol{X}\|_2$.  \textsf{[3 points]}
+\item Argue that the largest singular value of $\boldsymbol{\Phi^{\dagger}_S}$ lies between $\dfrac{1}{\sqrt{1+ \delta_{2k}}}$ and $\dfrac{1}{\sqrt{1- \delta_{2k}}}$ where $k = |S|$ and $\delta_{2k}$ is the RIC of $\boldsymbol{\Phi}$ of order $2k$.  \textsf{[4 points]}
+\item This yields $\dfrac{\epsilon}{\sqrt{1+\delta_{2k}}} \leq \|\boldsymbol{x}-\boldsymbol{\tilde{x}}\|_2 \leq \dfrac{\epsilon}{\sqrt{1-\delta_{2k}}}$. Argue that the solution given by Theorem 3 is only a constant factor worse than this solution.  \textsf{[3 points]}
+\end{enumerate}
+
+\item If $s < t$ where $s$ and $t$ are positive integers, prove that $\delta_s \leq \delta_t$ where $\delta_s, \delta_t$ stand for the restricted isometry constant (of any sensing matrix) of order $s$ and $t$ respectively. \textsf{[8 points]}
+
+\item Here is our obligatory Google search question :-). Your task is to find out any one paper from within the last 5 years, apart from our Tapestry pooling paper from \url{https://arxiv.org/abs/2005.07895}, which applied compressed sensing for group testing (not necessarily for COVID-19 pooling, but other applications or even theoretical papers are fine). You may look for references in the Tapestry pooling paper as well. Unpublished papers from arxiv are allowed as well. Answer the following questions: (1) Mention the title of the paper and a link to it. (2) Mention the key objective function being minimized in the paper with the meaning of all symbols clearly explained. (3) Enlist any three differences between the proposed approach and the Tapestry pooling approach. \textsf{[8+7=15 points]}
+
+\item Consider the problem P1: $\textrm{min}_{\boldsymbol{x}} \|\boldsymbol{x}\|_1 \textrm{ s. t. } \|\boldsymbol{y}-\boldsymbol{\Phi x}\|_2 \leq \epsilon$. Also consider the LASSO problem which seeks to minimize the cost function $J(\boldsymbol{x}) = \|\boldsymbol{y}-\boldsymbol{\Phi x}\|^2_2 + \lambda \|\boldsymbol{x}\|_1$. If $\boldsymbol{x}$ is a minimizer of $J(.)$ for some value of $\lambda > 0$, then show that there exists some value of $\epsilon$ for which $\boldsymbol{x}$ is also the minimizer of the problem P1. \textsf{[6 points]} (Hint: Consider $\epsilon' = \|\boldsymbol{y} - \boldsymbol{\Phi x}\|_2$. Now use the fact that $\boldsymbol{x}$ is a minimizer of $J(.)$ to show that it is also a minimizer of P1 subject to an appropriate constraint involving $\epsilon'$.)
+
+\end{enumerate}
+\end{document}

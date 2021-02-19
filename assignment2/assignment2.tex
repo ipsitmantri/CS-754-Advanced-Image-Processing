@@ -26,14 +26,11 @@ If $\delta_{2s} = 1$, then for any $2s$ - sparse vector $h \in \R^n$, we have
 \begin{equation}
 0 \leq \norm{\Phi h}_2^2 \leq 2\: \norm{h}_2^2
 \end{equation}
-If $2s$ columns of $\Phi$ are linearly dependent, then we have
-$$\sum_i \alpha_i \phi_i = 0 \:\:\:, \alpha_i \neq0$$
-Where $\{\phi_i\}$ are the $2s$ linearly dependent columns of $\Phi$ and $\{\alpha_i\}$ are some non-zero constants. This summation can be re-written as
-$$\Phi v = 0, \:\:\: \Phi = [\phi_1| \ldots |\phi_{2s}], v^{\text{T}} = [\alpha_1, \ldots, \alpha_{2s}]$$
-Now, we can extend $v$ by adding rows of zeros so that the extended vector $v_1 \in \R^n$. Similarly, we can extend the columns of $\Phi$ by adding random columns (this works because we want the measurement matrix to be random in Compressed Sensing) so that $\Phi \in \R^{m \times n}$. Even after this extension, we still have
-$$\Phi v_1 = 0$$
-Clearly, we can see that $v_1$ is a $2s$ - sparse vector and also satisfies (1) trivially because $\norm{\Phi v_1}_2 = 0$.
-Hence, the above justifies that when $\delta_{2s} = 1$, there exists a $2s$ - sparse vector $h$ such that $\Phi h = 0$ and $2s$ columns of $\Phi$ are linearly dependent.  
+By the definition of restricted isometry property, $\delta_{2s}$ is the smallest number such that the above inequality holds. This means when $\delta_{2s} = 1$, the squared norm of $\Phi h$ should be zero, otherwise any other $\delta_{2s} > 1$ will satisfy the inequality condition of RIP. Keeping this in mind, we have
+$$\norm{\Phi h}_2^2 = 0 \implies \Phi h = 0$$
+We can re-rewrite it as
+$$\sum \limits_{i}\alpha_i \phi_i = 0, \:\:\: i=1,2,\ldots n, \:\: h=(\alpha_1, \alpha_2, \ldots, \alpha_n), \Phi = [\phi_1|\phi_2|\ldots|\phi_n]$$
+As $h$ is a $2s$ sparse vector, in the summation above, atmost $2s$ $\alpha_i$'s are non-zero. This means, $2s$ columns of $\Phi$ are linearly dependent. 
 \subsection*{1.2}
 We have $x^*$ and $x$ which satisfy the convex optimization problem
 \begin{equation}
@@ -356,14 +353,19 @@ $$\boldsymbol{\tilde{x}} = \boldsymbol{\Phi_S^\dagger}\boldsymbol{y}$$
 &=& \norm{\boldsymbol{\Phi_S^\dagger \eta}}_2 \leq \norm{\boldsymbol{\Phi_S^\dagger}}_2 \norm{\boldsymbol{\eta}}_2
 \end{eqnarray*}
 \subsection*{3.c}
-We know that if $\lambda_i$ are the non-zero singular values of $\boldsymbol{\Phi}$, then the singular values of $\boldsymbol{\Phi_S^\dagger}$ will be $\lambda_i^{-1}$. Also, if the eigen values of $\boldsymbol{\Phi}$ are denoted as $e_i$, then we know $\lambda_i = \sqrt{e_i}$.\\
-As $\boldsymbol{\Phi}$ satisfies restricted isometry property of order $2k$, we have
-$$(1 - \delta_{2k}) \norm{\boldsymbol{x}}_2^2 \leq \norm{\boldsymbol{\Phi x}}_2^2 \leq (1 + \delta_{2k}) \norm{\boldsymbol{x}}_2^2$$
-Re-writing $\norm{A}_2^2 = A^T A$, we can say that 
-$$1 - \delta_{2k} \leq e_i \leq 1 + \delta_{2k}$$
-which is equivalent to
-$$\frac{1}{\sqrt{1 + \delta_{2k}}} \leq \frac{1}{\lambda_i} \leq \frac{1}{\sqrt{1 - \delta_{2k}}}$$
-Hence we can say that the largest singular value of $\boldsymbol{\Phi_S^\dagger}$ lies between $\frac{1}{\sqrt{1 + \delta_{2k}}}$ and $\frac{1}{\sqrt{1 - \delta_{2k}}}$
+If we consider the singular value decomposition of $\Phi$, 
+$$\boldsymbol{\Phi} = U \Sigma V^T$$
+We then have
+$$\boldsymbol{\Phi}^T \boldsymbol{\Phi} = V \Sigma^2 V^T$$
+By RIP, we have
+$$(1 - \delta_{2k}) \norm{x}_2^2 \leq \norm{\boldsymbol{\Phi} x}_2^2 \leq (1 + \delta_{2k})\norm{x}_2^2$$
+This can be re-written as 
+$$x^T \bigg(\boldsymbol{\Phi}^T\boldsymbol{\Phi} - (1-\delta_{2k})I\bigg)x \geq 0$$ and
+$$x^T \bigg(\boldsymbol{\Phi}^T\boldsymbol{\Phi} - (1+\delta_{2k})I\bigg)x \leq 0$$
+This means the singular values $\lambda_i$ of $\Phi$ satisfy
+$$\sqrt{1 - \delta_{2k}} \leq \lambda_i \leq \sqrt{1 + \delta_{2k}}$$
+As $\boldsymbol{\Phi_S}$ is a submatrix of $\boldsymbol{\Phi}$, the singular values $e_i$ of $\boldsymbol{\Phi_S}$ also satisfy the above inequality.
+As we know that the singular values of pseudo inverse $\boldsymbol{\Phi_S^\dagger}$ are inverse of the singular values of $\boldsymbol{\Phi_S}$, we can argue that the largest singular value of $\boldsymbol{\Phi_S^\dagger}$ lies in the range $\frac{1}{\sqrt{1 + \delta_{2k}}}$ and $\frac{1}{\sqrt{1 - \delta_{2k}}}$
 \subsection*{3.d}
 From Noisy recovery theorem, we have
 $$\norm{x^* - x}_2 \leq C_0 k^{-1/2} \norm{x - \tilde{x}}_1 + C_1 \epsilon$$

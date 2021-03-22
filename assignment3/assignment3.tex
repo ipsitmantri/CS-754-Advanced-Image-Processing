@@ -10,15 +10,24 @@
 \usepackage{subcaption}
 \usepackage{hyperref}
 \usepackage{grffile}
+<<<<<<< HEAD
 \graphicspath{{./2/images},{./2/data}, {./}}
 
 \title{CS 754 - Advanced Image Processing\\Assignment 3 - Report}
 \author{Shaan ul Haque - 180070053\\Mantri Krishna Sri Ipsit - 180070032}
 \newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
+=======
+\graphicspath{{./2/images},{./}}
+
+\title{CS 754 - Advanced Image Processing\\Assignment 3 - Report}
+\author{Shaan ul Haque - 180070053\\Mantri Krishna Sri Ipsit - 180070032}
+
+>>>>>>> 74df940a40568f50423a76a7ed799b8d87800dc8
 \begin{document}
 
 \maketitle
 
+<<<<<<< HEAD
 \section*{Question 2}
 The original images of the slices used are as follows:
 \begin{figure}[ht]
@@ -187,4 +196,198 @@ R_\theta(f*k) &=& \int \limits_{-\infty}^\infty \int \limits_{-\infty}^ \infty (
 &=&  \int \limits_{-\infty}^\infty R(f)(\sigma, \theta) \, R(k)(\rho - \sigma, \theta)\: d\sigma\\
 &=& R_\theta(f) * R_\theta(k)
 \end{eqnarray*}
+=======
+\section*{Question 1}
+\subsection*{1.a}
+We would like the loss function defined by:
+\begin{equation*}
+    f_N(\beta) = \frac{|| \boldsymbol{y-X}\beta||^2_2}{2N}
+\end{equation*}
+to be strictly convex. For this we would like that the double derivative matrix, $\nabla^2 f(\beta) = \boldsymbol{X^TX}/N$, wrt to $\beta$ have all its eigenvalues be positive or be away from zero. Since $\boldsymbol{X} \in \boldsymbol{R^{p \times N}}$, the rank of $\boldsymbol{X^TX}$ is equal to min\{N,p\} which makes the matrix rank deficit.\\
+To relax the notion of convexity, we allow the function to be strictly convex in only some subset $\boldsymbol{C} \subset \boldsymbol{R^p}$. Thus, a function in strictly convex at $\beta^*$ wrt to a set $\boldsymbol{C}$ if:
+\begin{equation*}
+    \frac{v^T\nabla^2 f(\beta)v}{||v||^2_2} \geq \gamma \ \forall \ \textrm{non-zero} \ v \ \in \ \boldsymbol{C}
+\end{equation*}
+which, for our case gives (also called as \textit{restricted eigenvalues}):
+\begin{equation*}
+    \frac{v^T\boldsymbol{X^TX}v}{N||v||^2_2} \geq \gamma \ \forall \ \textrm{non-zero} \ v \ \in \ \boldsymbol{C}
+\end{equation*}
+Thus, we would like the minimum value of the LHS in the above equation to be greater than or equal to $\gamma$. Since the minimum value of the LHS is the minimum eigenvalue ($\lambda_{min}$) with the corresponding eigenvector constrained in the subset $\boldsymbol{C}$, we can also write the above equation as:
+\begin{equation*}
+    \lambda_{min} \geq \gamma \ \forall \ \textrm{non-zero} \ v \ \in \ \boldsymbol{C}
+\end{equation*}
+This is called as restricted eigenvalue condition.
+\subsection*{1.b}
+It is given that $\hat{\nu}$ is the minimizer of the equation:
+\begin{equation*}
+    G(\hat{\nu}) = \frac{||\boldsymbol{y-X}(\beta^*+\hat{\nu})||^2_2}{2N}+\lambda_N||(\beta^*+\hat{\nu})||_1
+\end{equation*}
+Thus, from the above assumption we can write $G(\hat{\nu}) \leq G(0)$
+\subsection*{1.c}
+Using the inequality obtained in previous part:
+\begin{equation*}
+    \frac{||\boldsymbol{y-X}(\beta^*+\hat{\nu})||^2_2}{2N}+\lambda_N||(\beta^*+\hat{\nu})||_1 \leq \frac{||\boldsymbol{y-X}\beta^*||^2_2}{2N}+\lambda_N||\beta^*||_1
+\end{equation*}
+Now since $\boldsymbol{y} = \boldsymbol{X}\beta^*+\boldsymbol{w}$, we substitute $\boldsymbol{w}$ in the above inequality to get:
+\begin{equation*}
+    \frac{||\boldsymbol{w}-\boldsymbol{X}\hat{\nu}||^2_2}{2N} - \frac{||\boldsymbol{w}||^2_2}{2N} \leq \lambda_N(||\beta^*||_1 - ||(\beta^*+\hat{\nu})||_1)
+\end{equation*}
+opening the brackets, we get:
+\begin{equation*}
+    \frac{(\boldsymbol{w}-\boldsymbol{X}\hat{\nu})^T(\boldsymbol{w}-\boldsymbol{X}\hat{\nu})}{2N} - \frac{\boldsymbol{w}^T\boldsymbol{w}}{2N} \leq \lambda_N(||\beta^*||_1 - ||(\beta^*+\hat{\nu})||_1)
+\end{equation*}
+which after simplification gives:
+\begin{equation*}
+    -\frac{\boldsymbol{w}^T\hat{\nu}\boldsymbol{X}}{N} + \frac{\hat{\nu}^T\boldsymbol{X}^T\boldsymbol{X}\hat{\nu}}{2N}\leq \lambda_N(||\beta^*||_1 - ||(\beta^*+\hat{\nu})||_1)
+\end{equation*}
+The above inequality after shifting terms right and left becomes our required expression:
+\begin{equation*}
+    \frac{||\boldsymbol{X}\hat{\nu}||^2_2}{2N}\leq \frac{\boldsymbol{w}^T\boldsymbol{X}\hat{\nu}}{N} + \lambda_N(||\beta^*||_1 - ||(\beta^*+\hat{\nu})||_1)
+\end{equation*}
+\subsection*{1.d}
+Since the expression $\frac{\boldsymbol{w}^T\boldsymbol{X}\hat{\nu}}{N}$ can also be written as $\frac{\hat{\nu}^T\boldsymbol{X}^T\boldsymbol{w}}{N}$ because this quantity is a scalar and transpose of scalar is same as the scalar, we get:
+\begin{equation*}
+    \hat{\nu}^T\boldsymbol{X}^T\boldsymbol{w} = <\hat{\nu}, \boldsymbol{X}^T\boldsymbol{w}>
+\end{equation*}
+Let for the sake of clarity assume $\boldsymbol{X}^T\boldsymbol{w} = \boldsymbol{y}$. Thus, the dot product becomes:
+\begin{equation*}
+    <\hat{\nu}, \boldsymbol{y}> = \sum_{i=1}^{p}\hat{\nu}_iy_i \leq \sum_{i=1}^{p}|\hat{\nu}_iy_i| \leq max_i\{|y_i|\}\sum_{i=1}^{p}|\hat{\nu}_i|
+\end{equation*}
+Writing the above equation in norm form we get ($||a||_\infty = max_n{|a_n|}$):
+\begin{equation*}
+    <\hat{\nu}, \boldsymbol{y}> = \sum_{i=1}^{p}\hat{\nu}_iy_i  \leq ||\boldsymbol{y}||_\infty||\hat{\nu}||_1
+\end{equation*}
+Hence, after dividing by N both sides we get:
+\begin{equation*}
+    \frac{\hat{\nu}^T\boldsymbol{X}^T\boldsymbol{w}}{N} \leq \frac{||\boldsymbol{X}^T\boldsymbol{w}||_\infty}{N}||\hat{\nu}||_1
+\end{equation*}
+Let $x_S \in  R^{|S|}$ denote the subvector indexed by elements of set S, with $x_{S^c}$ defined in an analogous manner.\\
+For the other term we have $\beta^*_{S_c} = 0$, as $\beta^*$ is assumed to be |S|-sparse vector and:
+\begin{equation*}
+    ||\beta^*+\hat{\nu}||_1 = ||\beta^*_{S}+\hat{\nu}_{S}||_1+||\hat{\nu}_{S^c}||_1 \geq ||\beta^*_{S}||_1-||\hat{\nu}_{S}||_1+||\hat{\nu}_{S^c}||_1
+\end{equation*}
+Using above two inequalities, we can obtain eq. 11.22 as:
+\begin{equation*}
+    \frac{||\boldsymbol{X}\hat{\nu}||^2_2}{2N}\leq \frac{||\boldsymbol{X}^T\boldsymbol{w}||_\infty}{N}||\hat{\nu}||_1 + \lambda_N(||\hat{\nu}_{S}||_1-||\hat{\nu}_{S^c}||_1)
+\end{equation*}
+\subsection*{1.e}
+Firstly, it is assumed that $\frac{||\boldsymbol{X}^T\boldsymbol{w}||_\infty}{N} \leq \frac{\lambda_N}{2}$. Using this:
+\begin{equation*}
+    \frac{||\boldsymbol{X}\hat{\nu}||^2_2}{2N} \leq \frac{\lambda_N}{2}(||\hat{\nu}_{S}||_1-||\hat{\nu}_{S^c}||_1) + \lambda_N(||\hat{\nu}_{S}||_1+||\hat{\nu}_{S^c}||_1)  
+\end{equation*}
+\begin{equation*}
+    = \frac{3}{2}\lambda_N||\hat{\nu}_{S}||_1-\frac{1}{2}\lambda_N||\hat{\nu}_{S^c}||_1 \leq \frac{3}{2}\lambda_N||\hat{\nu}_{S}||_1 \leq \frac{3}{2}\sqrt{k}\lambda_N||\hat{\nu}||_2 \ \textrm{(using Cauchy-Schwartz inequality)}
+\end{equation*}
+\subsection*{1.f}
+Using the restricted Eigenvalue condition and assuming the lasso error $\hat{\beta} - \beta^*$ is in the set $\boldsymbol{C}$ (defined in part a), we have:
+\begin{equation*}
+    \frac{v^T\boldsymbol{X^TX}v}{||v||^2_2} \geq \gamma \ \forall \ \textrm{non-zero} \ v \ \in \ \boldsymbol{C}
+\end{equation*}
+which gives:
+\begin{equation*}
+    \frac{||\boldsymbol{X}\hat{v}||_2^2}{2N} = \frac{\hat{v}^T\boldsymbol{X^TX}\hat{v}}{2N} \geq \frac{\gamma ||\hat{v}||^2_2}{2}
+\end{equation*}
+From the bound derived in previous part we have:
+\begin{equation*}
+    \frac{\gamma ||\hat{v}||^2_2}{2} \leq \frac{||\boldsymbol{X}\hat{\nu}||^2_2}{2N} \leq  \frac{3}{2}\sqrt{k}\lambda_N||\hat{\nu}||_2 
+\end{equation*}
+Thus, we have:
+\begin{equation*}
+    ||\hat{\beta} - \beta^*||_2 = ||\hat{v}||_2 \leq \frac{3}{\gamma}\sqrt{\frac{k}{N}}\sqrt{N}\lambda_N 
+\end{equation*}
+\subsection*{1.g}
+It is an assumption that we make in order to prove the cone constraint that $||\hat{\nu}_{S^c}||_1 \leq \alpha||\hat{\nu_S}||_1$. Specifically, we used the inequality to prove the bound in part e. Using the inequality in part e, we have:
+\begin{equation*}
+    \frac{||\boldsymbol{X}\hat{\nu}||^2_2}{2N} \leq \frac{3}{2}\lambda_N||\hat{\nu}_{S}||_1-\frac{1}{2}\lambda_N||\hat{\nu}_{S^c}||_1
+\end{equation*}
+Since the LHS is always greater than or equal to 0, we get:
+\begin{equation*}
+    0 \leq \frac{3}{2}\lambda_N||\hat{\nu}_{S}||_1-\frac{1}{2}\lambda_N||\hat{\nu}_{S^c}||_1 \Longrightarrow  ||\hat{\nu}_{S^c}||_1 \leq 3||\hat{\nu}_{S}||_1 \ \textrm{(Cone constraint)}
+\end{equation*}
+\subsection*{1.h}
+In the first part we saw that in order to minimize the loss function it must be strictly convex whereas in practice it is convex in some direction while non-concave in others. Thus, we relaxed the condition and allowed strict convexity only in a subset $\boldsymbol{C} \subset \boldsymbol{R}^p$. The lasso regression constraint that $||\beta||_1 \leq R$ with or without regularization leads the subset to be cone, i.e, $||\hat{\nu_S}||_1 \leq \alpha||\hat{\nu}_{S^c}||_1$.
+\subsection*{1.i}
+In both the theorems we are required to calculate the minimum eigenvalue of our dictionary matrix but in this theorem our search for the minimum eigenvalue is deterministic, i.e.,   in a set with cone constraint and moreover here we do not need the explicit calculation of the RIC. One fascinating thing to observe here is that this theorem also emphasizes on the interaction of the dictionary with noise vector, greater the correlation greater is the error whereas theorem 3 doesn't take any such thing into account. This theorem is also adaptive to the sparsity of signal as, if we increase sparsity constant $k$ error is bound to increase if N is kept constant whereas for theorem 3 no such direct conclusion be drawn as increasing k will lead to decrement in the $\frac{1}{\sqrt{k}}$ while increment in the RIC leading to increment in the constants $C_0$ and $C_1$, thus making any conclusion foggy.\\
+The biggest drawback of this theorem is that it doesn't consider compressible signals. The sparsity constraint for the sensed signal is very tight and does not allow room for signals which are less sparse but some elements are very small. Theorem 3 handles such situation well. 
+\subsection*{1.j}
+The common thread between `Dantzig selector' and the LASSO is accounting for the interaction of dictionary with the noise vector in the error bound. For `Dantzig selector' the maximum correlation $||A^Te||_{\infty}$ is assumed to be less than some constant $\lambda$. A similar kind of constraint was assumed for LASSO also, as assumed for proving the sub part 1.e. 
+\subsection*{1.k}
+Square-root lasso's biggest advantage is that without knowing or pre-estimating the noise variance $\sigma^2$, we can get near-oracle performance. The regression parameter in the lasso regression depends on the noise variance whose estimation in certain cases might be non-trivial. Moreover, in all $l_2$ error constraints, noise is assumed to be Gaussian in nature. But the theorem in paper doesn't require the knowledge of the noise variance, on top of that it doesn't even assume noise to be Gaussian in nature.
+
+\section*{Question 2}
+
+
+\section*{Question 3}
+
+
+\section*{Question 4}
+Mutual coherence is defined as:
+\begin{equation*}
+    \mu(\boldsymbol{A)} = max_{i, j, i \neq j}\frac{|\boldsymbol{A}_i^T\boldsymbol{A}_j|}{||\boldsymbol{A}_i||_2||\boldsymbol{A}_j||_2} = max_{i, j, i \neq j}|\boldsymbol{A}_i^T\boldsymbol{A}_j| 
+\end{equation*}
+where, the second equality assumes unit normalized columns.
+Now coming at RIC:
+\begin{equation*}
+    \delta_S = max\{\lambda_{max}-1, 1-\lambda_{min}\}
+\end{equation*}
+where, $\lambda_{max}$ and $\lambda_{min}$ are the maximum and minimum Eigenvalue of $\boldsymbol{X} = \boldsymbol{A_{\Gamma}^TA_{\Gamma}}$. Here subscript $\Gamma$ denotes only those indices retained in column of the matrix where the sparse vector $\boldsymbol{\theta}$ has non-zero elements. 
+Gershgorin theorem states that every Eigenvalue of a matrix B lies between:
+\begin{equation*}
+    B_{ii}-r_i \leq \lambda \leq B_{ii}+r_i
+\end{equation*}
+where $B_{ii}$ is the diagonal element at ith row while $r_i$ is the sum of off-diagonal elements. Using this we have:
+\begin{equation*}
+    \boldsymbol{X}_{ii}-r_i \leq \lambda_{max} \leq \boldsymbol{X}_{ii}+r_i
+\end{equation*}
+Now, since every (i,j) element of $\boldsymbol{X}$ is the dot product between the ith and jth column of $\boldsymbol{A_{\Gamma}}$ and $\mu(\boldsymbol{A)}$ is maximum among them barring the special case when i=j where the value of $\boldsymbol{X}_{ii} = 1$, we get:
+\begin{equation*}
+     \lambda_{max} \leq 1+\mu(\boldsymbol{A)}(S-1) \Longrightarrow \lambda_{max}-1 \leq 1+\mu(\boldsymbol{A)}(S-1)
+\end{equation*}
+where, the RHS is the consequence of only $|\Gamma| \leq S$ columns in $\boldsymbol{A_{\Gamma}}$. Now using the other side of inequality for $\lambda_{min}$, we get:
+\begin{equation*}
+  1-\mu(\boldsymbol{A)}(S-1) \leq \lambda_{min} \Longrightarrow 1-\lambda_{min} \leq \mu(\boldsymbol{A)}(S-1)
+\end{equation*}
+Using the above two inequalities, we get:
+\begin{equation*}
+  max\{\lambda_{max}-1, 1-\lambda_{min}\} \leq \mu(\boldsymbol{A)}(S-1) \Longrightarrow \delta_S \leq \mu(\boldsymbol{A)}(S-1)
+\end{equation*}
+
+\section*{Question 5}
+\begin{itemize}
+    \item \textbf{Title:} Tomographic reconstruction of the ionosphere using ground-based GPS data in the Australian region.
+    \item \textbf{Venue:}  Physics Department, La Trobe University, Bundoora, Vic 3086, Australia
+    \item \textbf{Year of publication of the paper:} 2015
+\end{itemize}
+\subsection*{Mathematical Problem}
+The reconstruction plane is discretized into two-dimensional pixels as shown in Fig. Usually, the grid of these two dimensional boxes is subdivided equidistantly with height and angular spacing. For the present study the grid boxes are 10 km in height and $1^\circ$ (~100 km) in width as shown in Fig. By assuming that the electron density is constant in each pixel, the TEC(Total Electron Content) along the ray path can be represented as a finite sum of shorter integrals along segments of the ray path length. Mathematically this can be expressed as:
+\begin{equation*}
+    \boldsymbol{STEC_i} = \sum_{j=1}^{M}n_jd_{ij}+e_j
+\end{equation*}
+where, $\boldsymbol{STEC_i}$ is the measurement for the ith projection, $n_j$ is the electron density in the jth pixel, $d_{ij}$ is the measurement constant, $e_j$ is the noise while M is the total number of pixels along each projection. In matrix form, it can be written as:
+\begin{equation*}
+    \boldsymbol{Y}_{T\times1} = \boldsymbol{D}_{T\times N}\boldsymbol{N}_{N\times1} + \boldsymbol{E_{T\times1}}
+\end{equation*}
+where $\boldsymbol{Y}$ is a column of T measurements, $\boldsymbol{N}$ is a column of the M unknown $n_j$s, $\boldsymbol{E}$ is a column of T values representing the error due to data noise and discretization, $\boldsymbol{D}$ is a T × M matrix with $d_{ij}$ being the length of link i that lies in pixel j, and thus $d_{ij}$ is 1 if the ith ray traverses through the jth pixel and 0 otherwise. Due to high precision in measurements, the model is simplified into:
+\begin{equation*}
+    \boldsymbol{Y}_{T\times1} = \boldsymbol{D}_{T\times N}\boldsymbol{N}_{N\times1}
+\end{equation*}
+\begin{figure}[H]
+  % will center the figure.
+  \centering
+  % include graphics (can include eps, jpg, pdf ...)
+  \includegraphics[scale=0.75]{tomo.png}  % change scale factor to re-size the image.
+  % give a caption.
+  \caption{Experimental setup}
+  % a label to refer to the figure
+  \label{fig:1}
+\end{figure}
+\subsection*{Method of optimization}
+One of the most commonly used inversion techniques is called algebraic reconstruction technique (ART). The ART algorithm, which can converge quickly in an iterative fashion compared to other reconstruction algorithms, is the preferable algorithm to use for ionospheric reconstruction in a region of interest with a limited widely spaced number of receivers, like the GPS receiver network in the Australian region. Due to these
+preferences, the ART algorithm has been used in this paper.
+\begin{equation*}
+    \boldsymbol{N}^{k+1} = \boldsymbol{N}^{k} + \lambda_k\frac{STEC_i - \sum_{j=1}^Md_{ij}n_j^k}{\sum_{j=1}^Md_{ij}d_{ij}}\boldsymbol{D}_i
+\end{equation*}
+where $\boldsymbol{D}_i$ is the ith row of $\boldsymbol{D}$, k is iteration number, and $\lambda_k$ is the relaxation parameter. The relaxation parameter ensures that the correction remains stable, and it is a real number usually confined to the interval $0 < \lambda_k < 2$ . The value of $\lambda_k$ is chosen to be the same for all iterations. In this case $\lambda_k$ = 0.005 had been used for all iterations.
+
+>>>>>>> 74df940a40568f50423a76a7ed799b8d87800dc8
 \end{document}

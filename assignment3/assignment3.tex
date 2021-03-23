@@ -137,7 +137,7 @@ The common thread between `Dantzig selector' and the LASSO is accounting for the
 Square-root lasso's biggest advantage is that without knowing or pre-estimating the noise variance $\sigma^2$, we can get near-oracle performance. The regression parameter in the lasso regression depends on the noise variance whose estimation in certain cases might be non-trivial. Moreover, in all $l_2$ error constraints, noise is assumed to be Gaussian in nature. But the theorem in paper doesn't require the knowledge of the noise variance, on top of that it doesn't even assume noise to be Gaussian in nature.
 
 \section*{Question 2}
-The original images of the slices used are as follows:
+The original images of the slices used are shown below. They have been zero-padded to size $255\times255$.
 \begin{figure}[ht]
 	\centering
 	\begin{minipage}[bt]{0.3\linewidth}
@@ -156,22 +156,38 @@ The original images of the slices used are as follows:
 		\caption{Slice 52}
 	\end{minipage}
 \end{figure}
-\subsection*{Part a}
+
+\subsection*{2.a}
 Here the tomographic reconstruction is performed using the \textbf{Filtered Backprojection} using the \textbf{Ram-Lak} filter. The reconstruction results for slices 50 and 51 are as follows:
 \begin{figure}[ht]
 	\centering
 	\begin{minipage}[bt]{0.5\linewidth}
 		\centering
 		\includegraphics[scale=0.25]{a_50.png}
-		\caption{Ram-Lak FBP - Slice 50}
+		\caption*{Ram-Lak FBP - Slice 50}
 	\end{minipage}
 	\begin{minipage}[bt]{0.4\linewidth}
 		\centering
 		\includegraphics[scale=0.25]{a_51.png}
-		\caption{Ram-Lak FBP - Slice 51}
+		\caption*{Ram-Lak FBP - Slice 51}
 	\end{minipage}
+\caption{Using 18 uniformly spaced angles for measurement}
 \end{figure}
-\subsection*{Part b}
+\begin{figure}[ht]
+	\centering
+	\begin{minipage}[bt]{0.5\linewidth}
+		\centering
+		\includegraphics[scale=0.25]{a_50_36.png}
+		\caption*{Ram-Lak FBP - Slice 50}
+	\end{minipage}
+	\begin{minipage}[bt]{0.4\linewidth}
+		\centering
+		\includegraphics[scale=0.25]{a_51_36.png}
+		\caption*{Ram-Lak FBP - Slice 51}
+	\end{minipage}
+	\caption{Using 36 randomly chosen angles for measurement}
+\end{figure}
+\subsection*{2.b}
 Here the tomographic reconstruction is performed by using the \textbf{Independent Compressive Sensing} based reconstruction for each slice by solving an optimization problem of the form
 $$J(x) = \norm{y - Ax}_2^2 + \lambda \norm{x}_1$$
 The reconstruction results for slices 50 and 51 are as follows:
@@ -180,15 +196,31 @@ The reconstruction results for slices 50 and 51 are as follows:
 	\begin{minipage}[bt]{0.5\linewidth}
 		\centering
 		\includegraphics[scale=0.25]{b_50.png}
-		\caption{Independent CS - Slice 50}
+		\caption*{Independent CS - Slice 50}
 	\end{minipage}
 	\begin{minipage}[bt]{0.4\linewidth}
 		\centering
 		\includegraphics[scale=0.25]{b_51.png}
-		\caption{Independent CS - Slice 51}
+		\caption*{Independent CS - Slice 51}
 	\end{minipage}
+\caption{Using 18 uniformly spaced angles for measurement}
 \end{figure}
-\subsection*{Part c}
+\begin{figure}[ht]
+	\centering
+	\begin{minipage}[bt]{0.5\linewidth}
+		\centering
+		\includegraphics[scale=0.25]{b_50_36.png}
+		\caption*{Independent CS - Slice 50}
+	\end{minipage}
+	\begin{minipage}[bt]{0.4\linewidth}
+		\centering
+		\includegraphics[scale=0.25]{b_51_36.png}
+		\caption*{Independent CS - Slice 51}
+	\end{minipage}
+	\caption{Using 36 randomly chosen angles for measurement}
+\end{figure}
+\newpage
+\subsection*{2.c}
 Here the tomographic reconstruction is performed by using the \textbf{Coupled Compressive Sensing} based reconstruction by solving an optimization problem of the form:
 $$J\bigg(\begin{bmatrix}
 \beta_1 \\ \Delta \beta_1
@@ -208,15 +240,31 @@ The reconstruction results for slices 50 and 51 are as follows:
 	\begin{minipage}[bt]{0.5\linewidth}
 		\centering
 		\includegraphics[scale=0.25]{c_50.png}
-		\caption{Coupled CS - Slice 50}
+		\caption*{Coupled CS - Slice 50}
 	\end{minipage}
 	\begin{minipage}[bt]{0.4\linewidth}
 		\centering
 		\includegraphics[scale=0.25]{c_51.png}
-		\caption{Coupled CS - Slice 51}
+		\caption*{Coupled CS - Slice 51}
 	\end{minipage}
+\caption{Using 18 uniformly spaced angles for measurement}
 \end{figure}
-\subsection*{Part d}
+\begin{figure}[ht]
+	\centering
+	\begin{minipage}[bt]{0.5\linewidth}
+		\centering
+		\includegraphics[scale=0.25]{c_50_36.png}
+		\caption*{Coupled CS - Slice 50}
+	\end{minipage}
+	\begin{minipage}[bt]{0.4\linewidth}
+		\centering
+		\includegraphics[scale=0.25]{c_51_36.png}
+		\caption*{Coupled CS - Slice 51}
+	\end{minipage}
+	\caption{Using 36 randomly chosen angles for measurement}
+\end{figure}
+\newpage
+\subsection*{2.d - Using 3 slices}
 Here the tomographic reconstruction is performed by using the \textbf{Coupled Compressive Sensing} based reconstruction \textbf{using 3 slices} by solving an optimization problem of the form:
 $$J\bigg(\begin{bmatrix}
 \beta_1 \\ \Delta \beta_1 \\ \Delta \beta_2
@@ -248,25 +296,50 @@ The reconstruction results for slices 50, 51 and 52 are as follows:
 	\begin{minipage}[bt]{0.3\linewidth}
 		\centering
 		\includegraphics[scale=0.5]{d_50.png}
-		\caption{3 CS - Slice 50}
+		\caption*{3 CS - Slice 50}
 	\end{minipage}
 	\begin{minipage}[bt]{0.3\linewidth}
 		\centering
 		\includegraphics[scale=0.5]{d_51.png}
-		\caption{3 CS - Slice 51}
+		\caption*{3 CS - Slice 51}
 	\end{minipage}
 	\begin{minipage}[bt]{0.3\linewidth}
 		\centering
 		\includegraphics[scale=0.5]{d_52.png}
-		\caption{3 CS - Slice 52}
+		\caption*{3 CS - Slice 52}
 	\end{minipage}
+\caption{Using 18 uniformly spaced angles for measurement}
 \end{figure}
-
-
+\begin{figure}[ht]
+	\centering
+	\begin{minipage}[bt]{0.3\linewidth}
+		\centering
+		\includegraphics[scale=0.5]{d_50_36.png}
+		\caption*{3 CS - Slice 50}
+	\end{minipage}
+	\begin{minipage}[bt]{0.3\linewidth}
+		\centering
+		\includegraphics[scale=0.5]{d_51_36.png}
+		\caption*{3 CS - Slice 51}
+	\end{minipage}
+	\begin{minipage}[bt]{0.3\linewidth}
+		\centering
+		\includegraphics[scale=0.5]{d_52_36.png}
+		\caption*{3 CS - Slice 52}
+	\end{minipage}
+	\caption{Using 36 uniformly chosen angles for measurement}
+\end{figure}
+\newpage
+The performance in all the above cases improves as the number of directions is increased.
 \section*{Question 3}
 For the sake of notational simplicity, denote $R(\rho, \theta)$ as the radon transform of $g(x, y)$ at a translation $\rho$ and at an angle $\theta$.
 $$R(\rho, \theta) = \int\limits_{-\infty}^\infty \int \limits_{-\infty}^\infty g(x, y) \, \delta(x \cos\theta  + y \sin \theta - \rho)\: dx\,dy$$
-\subsection*{Part a}
+\vspace{1.5cm}
+\begin{center}
+\textit{Please turn over}
+\end{center}
+\newpage
+\subsection*{3.a}
 \begin{eqnarray*}
 	R\big(g(x-x_0, y-y_0)\big)(\rho, \theta) &=& \int\limits_{-\infty}^\infty \int \limits_{-\infty}^\infty g(x-x_0, y-y_0)\,\delta(x \cos\theta  + y \sin \theta - \rho)\: dx\,dy\\\\
 	\text{Replace } x \rightarrow u+x_0, y \rightarrow v+y_0&&\\
@@ -275,11 +348,11 @@ $$R(\rho, \theta) = \int\limits_{-\infty}^\infty \int \limits_{-\infty}^\infty g
 	&=& R\big(g(x, y)\big)(\rho - x_0\cos\theta - y_0\sin\theta, \theta)
 \end{eqnarray*}
 
-\subsection*{Part b}
+\subsection*{3.b}
 $$g'(r, \psi) = g(r, \psi - \psi_0)$$
 Consider the radon transform in polar coordinates:
 $$R(g)(\rho, \theta) = \int \limits_{0}^{2\pi} \int \limits_{0}^\infty g(r, \psi)\, \delta\bigg(r\cos(\psi-\theta) - \rho\bigg)\: r\,dr\,d\psi$$
-\vspace{2cm}
+\vspace{4cm}
 \begin{center}
 	\textit{Please turn over}
 \end{center}
@@ -295,15 +368,14 @@ Now,
 	&=&	\int \limits_0^\infty \int \limits_{0}^{2\pi} g(r, \psi)\, \delta\bigg(r \cos \big(\psi - (\theta - \psi_0)\big) - \rho\bigg)\: r \,dr\,d\psi\\
 	&=& R(g)(\rho, \theta - \psi_0)
 \end{eqnarray*}
+\subsection*{3.c}
+The convolution of two signals $f(x, y)$ and $k(x, y)$ is given by:
+$$(f * k)(x, y) = \int \limits_{-\infty}^\infty \int \limits_{-\infty}^\infty f(u, v) k(x-u, y-v)\: dudv$$
 \vspace{3cm}
 \begin{center}
 \textit{Please turn over}
 \end{center}
 \newpage
-\subsection*{Part c}
-The convolution of two signals $f(x, y)$ and $k(x, y)$ is given by:
-$$(f * k)(x, y) = \int \limits_{-\infty}^\infty \int \limits_{-\infty}^\infty f(u, v) k(x-u, y-v)\: dudv$$
-
 The radon transform of the convolution will be
 \begin{eqnarray*}
 	R_\theta(f*k) &=& \int \limits_{-\infty}^\infty \int \limits_{-\infty}^ \infty (f*k)(x, y)\, \delta(x \cos \theta + y \sin \theta - \rho)\: dxdy\\

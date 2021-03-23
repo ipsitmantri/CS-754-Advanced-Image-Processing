@@ -10,6 +10,7 @@ slice_52 = im2double(imread("../data/slice_52.png"));
 slice_52 = padarray(slice_52, [37, 19], 0, 'both');
 %% Creating measurements
 random_angles = unifrnd(0, 180, 1, 36);
+% random_angles = 0:10:179;
 measurements_slice_50 = radon(slice_50, random_angles);
 measurements_slice_51 = radon(slice_51, random_angles);
 %% Part a - Filtered Back Projection using Ram-Lak Filter
@@ -64,7 +65,7 @@ projection_size = size(measurements_slice_51, 1);
 A = forward_model(@idct2, projection_size, 255, random_angles);
 At = forward_modelt(@dct2, projection_size, 255, random_angles);
 lambda = 0.1;
-rel_tol = 1e-7;
+rel_tol = 1e-9;
 quiet = true;
 [beta, status] = l1_ls(A, At, m, n, y_50, lambda,...
     rel_tol, quiet);
@@ -79,7 +80,9 @@ axis tight;
 colorbar;
 %% Part c - Coupled Reconstruction
 random_angles_set1 = unifrnd(0, 180, 1, 36);
+% random_angles_set1 = 0:10:179;
 random_angles_set2 = unifrnd(0, 180, 1, 36);
+% random_angles_set2 = 30:5:119;
 measurements_slice_50 = radon(slice_50, random_angles_set1);
 measurements_slice_51 = radon(slice_51, random_angles_set2);
 y_50 = measurements_slice_50(:);
@@ -117,8 +120,11 @@ axis tight;
 colorbar;
 %% Reconstruction using 3 slices
 random_angles_set1 = unifrnd(0, 180, 1, 36);
+% random_angles_set1 = 0:10:179;
 random_angles_set2 = unifrnd(0, 180, 1, 36);
+% random_angles_set2 = 30:5:119;
 random_angles_set3 = unifrnd(0, 180, 1, 36);
+% random_angles_set3 = 60:6:167;
 measurements_slice_50 = radon(slice_50, random_angles_set1);
 measurements_slice_51 = radon(slice_51, random_angles_set2);
 measurements_slice_52 = radon(slice_51, random_angles_set3);
@@ -132,7 +138,7 @@ projection_size = size(measurements_slice_50, 1);
 A = forward_model_coupled_3(@idct2, projection_size, 255, random_angles_set1, random_angles_set2, random_angles_set3);
 At = forward_model_coupled_3t(@dct2, projection_size, 255, random_angles_set1, random_angles_set2, random_angles_set3);
 lambda = 0.1;
-rel_tol = 1e-6;
+rel_tol = 1e-9;
 quiet = true;
 [beta, status] = l1_ls(A, At, m, n, y_combined, lambda,...
     rel_tol, quiet);
@@ -166,11 +172,4 @@ daspect([1 1 1]);
 axis on;
 axis tight;
 colorbar;
-
-
-
-
-
-
-
 %% toc;

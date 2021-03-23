@@ -9,7 +9,7 @@ slice_51 = padarray(slice_51, [37, 19], 0, 'both');
 slice_52 = im2double(imread("../data/slice_52.png"));
 slice_52 = padarray(slice_52, [37, 19], 0, 'both');
 %% Creating measurements
-random_angles = unifrnd(0, 180, 1, 18);
+random_angles = unifrnd(0, 180, 1, 36);
 measurements_slice_50 = radon(slice_50, random_angles);
 measurements_slice_51 = radon(slice_51, random_angles);
 %% Part a - Filtered Back Projection using Ram-Lak Filter
@@ -78,8 +78,8 @@ axis on;
 axis tight;
 colorbar;
 %% Part c - Coupled Reconstruction
-random_angles_set1 = unifrnd(0, 180, 1, 18);
-random_angles_set2 = unifrnd(0, 180, 1, 18);
+random_angles_set1 = unifrnd(0, 180, 1, 36);
+random_angles_set2 = unifrnd(0, 180, 1, 36);
 measurements_slice_50 = radon(slice_50, random_angles_set1);
 measurements_slice_51 = radon(slice_51, random_angles_set2);
 y_50 = measurements_slice_50(:);
@@ -116,9 +116,9 @@ axis on;
 axis tight;
 colorbar;
 %% Reconstruction using 3 slices
-random_angles_set1 = unifrnd(0, 180, 1, 18);
-random_angles_set2 = unifrnd(0, 180, 1, 18);
-random_angles_set3 = unifrnd(0, 180, 1, 18);
+random_angles_set1 = unifrnd(0, 180, 1, 36);
+random_angles_set2 = unifrnd(0, 180, 1, 36);
+random_angles_set3 = unifrnd(0, 180, 1, 36);
 measurements_slice_50 = radon(slice_50, random_angles_set1);
 measurements_slice_51 = radon(slice_51, random_angles_set2);
 measurements_slice_52 = radon(slice_51, random_angles_set3);

@@ -54,7 +54,7 @@ We took sparsity level (s) = 20 and noise standard deviation factor = 0.5. We va
   % a label to refer to the figure
   \label{fig:2}
 \end{figure}
-We observe that as we increase K the RMSE increases which is as we should expect since noise standard deviation = 0.5(mean(f1)+mean(f2)) thus as magnitude of f2 is increased noise variance increases as well leading to larger RMSE. The hyper-parameter $\lambda$ was chosen to be 1.75 as we observed least overall RMSE for this value.
+We observe that as we increase K the RMSE increases which is as we should expect since noise standard deviation = 0.5(mean(f1)+mean(f2)), thus as magnitude of f2 is increased noise variance increases as well leading to larger RMSE. The hyper-parameter $\lambda$ was chosen to be 1.75 as we observed least overall RMSE for this value.
 
 \section*{Question 3}
 We know that by dictionary representation we can compactly express a large number image into small number of dictionary atoms. For any image, each of it's pixel value is the linear combination of those pixels in dictionary atom (when these atoms are represented into images by reshaping the columns). Due to this linearity, any linear operation done on the dictionary atoms gets reflected as it is in the image as well and vice versa. This can be seen from the following equations. \\
@@ -126,8 +126,8 @@ Blur kernels are linear transformation on images only, such as the Gaussian blur
 \subsection*{3.e}
 Let the set of blur kernel $\boldsymbol{B} = \{\boldsymbol{b_1}, \boldsymbol{b_2}... \boldsymbol{b_p}\}$. Now let us pick any image $\boldsymbol{I_{blur}}$ from set $\boldsymbol{S_5}$ which is a blurred image of $\boldsymbol{I}$ from $\boldsymbol{S}$.
 \begin{equation*}
-    \boldsymbol{I_{blur}} = \sum_{i=1}^{k}c_i\boldsymbol{b_i(I)}
+    \boldsymbol{I_{blur}} = \sum_{i=1}^{n}c_i\boldsymbol{b_i(I)}
 \end{equation*}
-where $c_i$ is the weights for the blur kernel for the image. From part d, we know that blur kernel is gets applied as it is to the atoms of the dictionary as well. Thus, all the new images in the set $\boldsymbol{S_5}$ are essentially linear combination of various blurred atoms from the dictionary with appropriate weights. The new dictionary will the become, $\boldsymbol{D_5}$ = $[\boldsymbol{b_1(D)}| \boldsymbol{b_2(D)}... \boldsymbol{b_p(D)}]$, where $\boldsymbol{b_i(D)} = \{\boldsymbol{b_i(d_1)}, \boldsymbol{b_i(d_2)}... \boldsymbol{b_i(d_k)}\}$, i.e., the blur kernel applied to all the atoms of the dictionary.
+where $c_i$ is the weights for the blur kernel for the image. From part d, we know that blur kernel gets applied as it is to the atoms of the dictionary as well. Thus, all the new images in the set $\boldsymbol{S_5}$ are essentially linear combination of various blurred atoms from the dictionary with appropriate weights. The new dictionary will be concatenation of various blurred dictionary atoms, $\boldsymbol{D_5}$ = $[\boldsymbol{b_1(D)}| \boldsymbol{b_2(D)}|... \boldsymbol{b_p(D)}]$, where $\boldsymbol{b_i(D)} = \{\boldsymbol{b_i(d_1)}, \boldsymbol{b_i(d_2)}... \boldsymbol{b_i(d_k)}\}$, i.e., the blur kernel applied to all the atoms of the dictionary.
 
 \end{document}

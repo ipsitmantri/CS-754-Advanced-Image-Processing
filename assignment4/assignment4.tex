@@ -223,7 +223,7 @@ $$J(\boldsymbol{A_r}) = \norm{\boldsymbol{A} - \boldsymbol{A_r}}_F^2$$
 Solving this optimization problem is nothing but finding the best r-rank approximation of the matrix $\boldsymbol{A}$.  As we have seen in the lecture, this is done by using the top r-largest singular values and reconstructing $\boldsymbol{A_r}$. This is also known as \textbf{Eckart–Young–Mirsky theorem}. 
 \begin{eqnarray*}
 	\boldsymbol{A} &=& \boldsymbol{U} \boldsymbol{S} \boldsymbol{V}^\intercal \\
-	\implies \boldsymbol{A_r} &=& \boldsymbol{U}(:,1:r) \boldsymbol{S}(1:r,1:r)\bigg(\boldsymbol{V}(:,1:k) \bigg)^\intercal
+	\implies \boldsymbol{A_r} &=& \boldsymbol{U}(:,1:r) \boldsymbol{S}(1:r,1:r)\bigg(\boldsymbol{V}(:,1:r) \bigg)^\intercal
 \end{eqnarray*}
 \newline
 This low rank matrix approximation can be used in \textbf{Texture Completion}. Generally the texture or any repeating pattern is captured by the low rank approximation. This optimization problem can be used to remove occlusions either from a photo or a video and do a robust repair, which is an application of \textbf{Robust PCA}.

@@ -1,0 +1,46 @@
+\title{Assignment 4: CS 754, Advanced Image Processing}
+\author{}
+\date{Due: 5th April before 11:55 pm}
+
+\documentclass[11pt]{article}
+
+\usepackage{amsmath}
+\usepackage{amssymb,color}
+\usepackage{hyperref}
+\usepackage{ulem}
+\usepackage[margin=0.5in]{geometry}
+\begin{document}
+\maketitle
+
+\textbf{Remember the honor code while submitting this (and every other) assignment. All members of the group should work on and \emph{understand} all parts of the assignment. We will adopt a \textbf{zero-tolerance policy} against any violation.}
+\\
+\\
+\textbf{Submission instructions:} You should ideally type out all the answers in Word (with the equation editor) or using Latex. In either case, prepare a pdf file. Create a single zip or rar file containing the report, code and sample outputs and name it as follows: A4-IdNumberOfFirstStudent-IdNumberOfSecondStudent.zip. (If you are doing the assignment alone, the name of the zip file is A4-IdNumber.zip). Upload the file on moodle BEFORE 11:55 pm on the due date. The cutoff is 10 am on 6th April after which no assignments will be accepted. Note that only one student per group should upload their work on moodle. Please preserve a copy of all your work until the end of the semester. \emph{If you have difficulties, please do not hesitate to seek help from me.} 
+
+\begin{enumerate}
+\item Consider a signal $\boldsymbol{f} = \boldsymbol{f_1} + \boldsymbol{f_2} + \boldsymbol{\eta}$ where $\boldsymbol{f_1}$ is a sparse linear combination of cosine waves with integer frequencies (i.e. sparse in DCT basis) and $\boldsymbol{f_2}$ is a signal consisting of a small number of spikes. $\boldsymbol{\eta}$ represents noise from $\mathcal{N}(0,\sigma^2)$ where $\sigma = 0.01 \times $ average value of $\boldsymbol{f_1} + \boldsymbol{f_2}$. Consider that $\boldsymbol{f}$ is a 1D discrete signal with 256 elements. Your job is to implement any technique of your choice to separate $\boldsymbol{f}$ into $\boldsymbol{f_1}$ and $\boldsymbol{f_2}$. That is, you are given only $\boldsymbol{f}$ (which is noisy) and you want to estimate $\boldsymbol{f_1}$ and $\boldsymbol{f_2}$. Experimentally study the quality of the estimation of both components (in terms of relative reconstruction error for both $\boldsymbol{f_1}$ and $\boldsymbol{f_2}$) with (a) varying $\sigma$ and fixed $s$, and (b) varying sparsity level $s$ with fixed $\sigma$. You may assume for simplicity that $s$ is same for both. Include all relevant plots in your report, and mention which technique you used. Comment on these results. \\
+Now suppose that the magnitude of $\boldsymbol{f_2}$ was $k$ times that of $\boldsymbol{f_1}$. Study the effect of varying $k$ on the RMSE of both signals, on the same algorithm. Again, include the relevant plot and comments in your report. You may use any ready-made CS solver - examples are your own implementation of ISTA, OMP or solvers such as L1\_LS, SPGL1, YALL1, L1-MAGIC (MATLAB codes for all are freely downloadable from the web). In all cases, state how you picked the relevant parameters for the solver or algorithm. \textsf{[20 points]}
+
+\item We have studied two greedy algorithms for compressive recovery in class - MP and OMP. Your task is to do a google search and find out a research paper that proposes a greedy algorithm for CS recovery that is different from OMP and MP. Write down the algorithm in your report in the form of a simple pseudo-code. State the key theorem from the paper which presents performance bounds for the algorithm, and explain the meaning of the terms involved. If there are multiple theorems, pick the one that states the strongest result. \textsf{[20 points]}
+
+\item Consider that you learned a dictionary $\boldsymbol{D}$ to sparsely represent a certain class $\mathcal{S}$ of images - say handwritten alphabet or digit images. How will you convert $\boldsymbol{D}$ to another dictionary which will sparsely represent the following classes of images? Note that you are not allowed to learn the dictionary all over again, as it is time-consuming. 
+\begin{enumerate}
+\item Class $\mathcal{S}_1$ which consists of images obtained by applying a known derivative filter to the images in $\mathcal{S}$. 
+\item Class $\mathcal{S}_2$ which consists of images obtained by rotating a subset of the images in class $\mathcal{S}$ by a known fixed angle $\alpha$, and the other subset by another known fixed angle $\beta$.
+\item Class $\mathcal{S}_3$ which consists of images obtained by applying an intensity transformation $I^i_{new}(x,y) = \alpha (I^i_{old}(x,y))^2 + \beta (I^i_{old}(x,y)) + \gamma$ to the images in $\mathcal{S}$, where $\alpha,\beta,\gamma$ are known.  
+\item Class $\mathcal{S}_4$ which consists of images obtained by applying a known blur kernel to the images in $\mathcal{S}$. 
+\item Class $\mathcal{S}_5$ which consists of images obtained by applying a blur kernel which is known to be a linear combination of blur kernels belonging to a known set $\mathcal{B}$, to the images in $\mathcal{S}$. \textsf{[4+4+4+4+4=20 points]}
+\end{enumerate}
+
+\item How will you solve for the minimum of the following objective functions: (1) $J(\boldsymbol{A_r}) = \|\boldsymbol{A}-\boldsymbol{A_r}\|^2_F$, where $\boldsymbol{A}$ is a known $m \times n$ matrix of rank greater than $r$, and $\boldsymbol{A_r}$ is a rank-$r$ matrix, where $r < m, r < n$. (2) $J(\boldsymbol{R}) = \|\boldsymbol{A}-\boldsymbol{R} \boldsymbol{B}\|^2_F$, where $\boldsymbol{A} \in \mathbb{R}^{n \times m}, \boldsymbol{B} \in \mathbb{R}^{n \times m}, \boldsymbol{R} \in \mathbb{R}^{n \times n}, m > n$ and $\boldsymbol{R}$ is constrained to be orthonormal. Note that $\boldsymbol{A}$ and $\boldsymbol{B}$ are both known. \\
+In both cases, explain briefly any one situation in image processing where the solution to such an optimization problem is required. \textsf{[5+5+5+5=20 points]}
+
+\item Read the paper `A Signal Processing Perspective on Hyperspectral Unmixing', a copy of which is placed in the homework folder. Answer the following questions:
+\begin{enumerate}
+\item What is hyperspectral unmixing? You may use an equation to support your answer with symbol meanings carefully explained.
+\item In  equation 40 of the paper, explain how non-negative matrix factorization is used for hyperspectral unmixing. 
+\item Explain the improvement to non-negative matrix factorization proposed in equation 41 of the paper. (You may explain any two forms each for $g$ and $h$.) \textsf{[6+6+8=20 points]}
+\end{enumerate}
+
+\end{enumerate}
+\end{document}

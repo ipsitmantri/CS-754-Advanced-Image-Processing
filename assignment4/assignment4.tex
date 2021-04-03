@@ -1,0 +1,186 @@
+\documentclass[12pt]{article}
+\usepackage[margin = 0.9in, top=0.8in]{geometry}
+\usepackage{graphicx}
+\usepackage{textgreek}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{mathtools}
+\usepackage{amssymb}
+\usepackage{float}
+\usepackage{subcaption}
+%\usepackage{algorithm}
+%\usepackage{algorithmic}
+%\usepackage[noend]{algpseudocode}
+\usepackage[english]{babel}
+\newtheorem{theorem}{Theorem}
+\usepackage[ruled, lined, linesnumbered, commentsnumbered, longend]{algorithm2e}
+\usepackage{hyperref}
+\usepackage{grffile}
+\graphicspath{{./2/images},{./2/data}, {./}}
+
+\title{CS 754 - Advanced Image Processing\\Assignment 4 - Report}
+\author{Shaan ul Haque - 180070053\\Mantri Krishna Sri Ipsit - 180070032}
+\newcommand{\norm}[1]{\left\lVert #1 \right\rVert}
+\SetKwInOut{KwA}{Assumption}
+\SetKwInOut{KwIn}{Input}
+\SetKwInOut{KwOut}{Output}
+\SetKwInOut{KwInit}{Initialization}
+\SetKwInOut{KwIter}{Iteration}
+\SetKwInOut{KwRep}{repeat}
+\SetKwInOut{KwDef}{Define}
+\begin{document}
+	
+	\maketitle
+	\section*{2}
+	The algorithm other than OMP and MP presented is called as \textbf{Look Ahead Orthogonal Matching Pursuit}. The standard OMP serially adds one component to the support-set that will irreversibly remain in the final estimate, in each iteration. The current choice of the component chosen is independent of the final result. This shortcoming can be overcome using a \textit{look ahead} strategy. In this method, an element is chosen by evaluating its effect on the final performance, in the sense of minimizing the fitting residual at the end of all future iterations. In the current iteration, several potential elements are chosen by the matched filter MF. Each of the potential elements are tested independently, and then one element among them is selected and inducted to the support-set. Among the potential elements, the element that will be selected provides the minimum fitting residual after executing all the future iterations (look ahead strategy). This method is referred to as LAOMP. To develop the LAOMP algorithm, the following algorithm is helpful:
+	
+	Some notations that were followed:
+\begin{eqnarray*}
+\texttt{resid}(\boldsymbol{y}, \boldsymbol{A}_{\mathcal{T}}) &\triangleq& \boldsymbol{y} - \boldsymbol{y}_p, \quad \text{where} \quad \boldsymbol{y}_p = \boldsymbol{A}_\mathcal{T}\boldsymbol{A}_\mathcal{T}^\dagger\boldsymbol{y}\\
+\texttt{supp}(\boldsymbol{x}, k) &\triangleq& \text{\{the set of indices corresponding to the $k$ largest components of $\boldsymbol{x}$\}}\\
+\texttt{supp}(\boldsymbol{x}) &\triangleq& \text{\{the set of indices corresponding to all the non-zero components of $\boldsymbol{x}$\}}
+\end{eqnarray*}
+	
+	\vspace{2cm}
+	\begin{center}
+		\textit{Please turn over}
+	\end{center}
+	\begin{algorithm}[ht]
+		\caption{\texttt{look\_ahead\_resid}: Look Ahead Residual}
+		\KwIn{$\boldsymbol{A}, \boldsymbol{y}, T$, previous support-set $\mathcal{T}_{\text{old}}$, new index $\tau$}
+		\KwA{$i \not \in \mathcal{T}_{\text{old}}$, $\hat{\boldsymbol{x}} \in \mathbb{R}^N$}
+		\KwInit{}
+		$k = |\mathcal{T}_{\text{old}}| + 1$\;
+		$\mathcal{T}_k \gets \mathcal{T}_{\text{old}} \cup \tau$\;
+		$\mathbf{r}_k \gets \texttt{resid}(\mathbf{y}, \mathbf{A}_{\mathcal{T}_k})$\;
+		\KwIter{}
+		\Repeat{k=T}{
+		$k  \gets k+1$\;
+	$\tau_k \gets \texttt{supp}(\mathbf{A}^{\intercal} \mathbf{r}_{k-1}, 1)$\;
+$\mathcal{T}_k \gets \mathcal{T}_{k-1} \cup \tau_k$\;
+$\mathbf{r}_k \gets \texttt{resid}(\mathbf{y}, \mathbf{A}_{\mathcal{T}_k})$\;}
+\KwOut{$\mathbf{r} \gets \mathbf{r}_k$}
+\end{algorithm}
+\newpage
+The above algorithm is the look ahead part of LAOMP. Given the sparsity
+level $T$ , an intermediate support set $\mathcal{T}$ and a new choice of an atom index $\tau$, the
+algorithm usually finds a $T$-element support set at the end and returns the final least squares (LS) residual.	
+\newline
+The LAOMP algorithm is based on OMP to construct the support set progressively. In LAOMP, for the choice of a new atom, we take into account its effect
+on the final performance in the sense of minimizing the residual. We fix an integer
+parameter $\lambda$ which is referred to as the look ahead parameter. For the kth iteration,
+the $\lambda$ best choices of new atoms are found using MF (Step 3). Then, for each choice
+of $\lambda$ atoms, we allow the algorithm to execute until it selects $T$ atoms (Steps 4 and
+5. From the $\lambda$ atoms we choose the one that results in the minimum norm of fitting
+residual (Step 9). The chosen atom is added to the intermediate support set $\mathcal{T}_{k-1}$
+to form the new support set $\mathcal{T}_k$ of cardinality k. The rest of the algorithm remains
+same as standard OMP. We note that the algorithm must stop when the number
+of iterations exceeds $T$ . Like most GP algorithms, we assume that the a-priori knowledge of the sparsity level $T$ is available. Also note that, as the value of the
+look ahead parameter $\lambda$ increases, better performance can be expected, but at the
+expense of higher complexity. For $\lambda = 1$, LAOMP will provide the same result as
+OMP.
+\vspace{2cm}
+\begin{center}
+\textit{Please turn over}
+\end{center}
+\newpage
+\begin{algorithm}[ht]
+	\caption{Look ahead orthogonal matching pursuit (LAOMP)}
+	\KwIn{$\boldsymbol{A}, \boldsymbol{y}, T$, look ahead parameter $\lambda \leq T$}
+	\KwDef{$\boldsymbol{n} = [n_1, n_2, \ldots, n_\lambda]^\intercal$ and $\mathcal{T}_\Lambda = [\mathcal{T}_\Lambda(1)], \mathcal{T}_\Lambda(2), \ldots, \mathcal{T}_\Lambda(L)]$}
+	\KwInit{}
+	$k \gets 0, l \gets 0$\;
+	$\boldsymbol{r}_k \gets \boldsymbol{y}, \hat{\boldsymbol{x}}_k \gets \boldsymbol{0}, \mathcal{T}_k \gets \emptyset$\;
+	\KwIter{}
+	\Repeat{k = T}{
+	$k \gets k + 1$\;
+$\mathcal{T}_\Lambda \gets \texttt{supp}(\boldsymbol{A}^\intercal\boldsymbol{r}_{k-1}, \lambda)$\;
+\For{$l = 1$ to $\lambda$}{$\boldsymbol{rr} \gets \texttt{look\_ahead\_resid}\big(\boldsymbol{y}, \boldsymbol{A}, T, \mathcal{T}_{k-1}, \mathcal{T}_{\Lambda}(l)\big)$\;
+$n_l \gets \norm{\boldsymbol{rr}}_2$}
+$l \gets \text{Smallest component in \textbf{n}}$\;
+$\tau_k \gets \mathcal{T}_{\Lambda}(l)$\;
+$\mathcal{T}_k \gets \mathcal{T}_{k-1} \cup \tau_k$\;
+$\hat{\boldsymbol{x}} \in \mathbb{R}^N$ such that $\hat{\boldsymbol{x}}_{\mathcal{T}_k} = \boldsymbol{A}^\dagger_{\mathcal{T}_k} \boldsymbol{y}$ and $\hat{\boldsymbol{x}}_{\mathcal{T}^c_k} = \boldsymbol{0}$\;
+$\boldsymbol{r}_k \gets \texttt{resid}(\boldsymbol{y}, \boldsymbol{A}_{\mathcal{T}_k})$}
+\KwOut{$\hat{\boldsymbol{x}} \in \mathbb{R}^N$ such that $\hat{\boldsymbol{x}}_{\mathcal{T}_k} = \boldsymbol{A}^\dagger_{\mathcal{T}_k} \boldsymbol{y}$ and $\hat{\boldsymbol{x}}_{\mathcal{T}^c_k} = \boldsymbol{0}$}
+\end{algorithm}
+As this algorithm is based on OMP, the following theorem which presents the performance bounds is also valid for LAOMP. (There is not seperate theorem stating performance bounds was given for LAOMP)
+\begin{theorem}
+	Suppose that $\boldsymbol{A}$ satisfies the restricted isometry property (RIP) of order $T+1$ with isometry constant $\delta_{T+1} < \frac{1}{3\sqrt{T}}$. Then, for any $\boldsymbol{x} \in \mathbb{R}^N$ with the number of non-zeros less than or equal to $s$, LAOMP (OMP) will recover $\boldsymbol{x}$ exactly from $\boldsymbol{y} = \boldsymbol{A} \boldsymbol{x}$ in $T$ iterations.
+\end{theorem}
+
+\begin{theorem}[Restricted Isometry Property]
+A matrix $A$ is said to obey the restricted isometry property of order $N$ if for any $N$-sparse vector $x$ 
+$$(1 - \delta_N) \norm{x}^2_2 \leq \norm{Ax}_2^2 \leq (1 + \delta_N) \norm{x}_2^2$$
+where $0 \leq \delta_N \leq 1$ is the smallest positive number such that the above relation holds and it is called ``restricted isometry constant" or ``isometry constant".
+\end{theorem}
+
+\section*{4}
+\subsection*{4.1}
+$$J(\boldsymbol{A_r}) = \norm{\boldsymbol{A} - \boldsymbol{A_r}}_F^2$$
+Solving this optimization problem is nothing but finding the best r-rank approximation of the matrix $\boldsymbol{A}$.  As we have seen in the lecture, this is done by using the top r-largest singular values and reconstructing $\boldsymbol{A_r}$. This is also known as \textbf{Eckart–Young–Mirsky theorem}. 
+\begin{eqnarray*}
+	\boldsymbol{A} &=& \boldsymbol{U} \boldsymbol{S} \boldsymbol{V}^\intercal \\
+	\implies \boldsymbol{A_r} &=& \boldsymbol{U}(:,1:r) \boldsymbol{S}(1:r,1:r)\bigg(\boldsymbol{V}(:,1:k) \bigg)^\intercal
+\end{eqnarray*}
+\newline
+This low rank matrix approximation can be used in \textbf{Texture Completion}. Generally the texture or any repeating pattern is captured by the low rank approximation. This optimization problem can be used to remove occlusions either from a photo or a video and do a robust repair, which is an application of \textbf{Robust PCA}.
+
+\subsection*{4.2}
+$$J(\boldsymbol{R}) = \norm{\boldsymbol{A} - \boldsymbol{RB}}_F^2$$
+where $\boldsymbol{R}$ is an orthonormal matrix i.e, $\boldsymbol{R}\boldsymbol{R}^\intercal = \boldsymbol{R}^\intercal \boldsymbol{R} = \boldsymbol{I}$.
+This optimization is solved as follows:
+\begin{eqnarray*}
+	\min \norm{\boldsymbol{A} - \boldsymbol{RB}}_F^2 &=& \min \mathrm{Tr}\bigg((\boldsymbol{A}-\boldsymbol{RB})^\intercal\, (\boldsymbol{A}-\boldsymbol{RB})\bigg)\\
+	&=& \min \mathrm{Tr}\bigg((\boldsymbol{A}^\intercal-\boldsymbol{B}^\intercal\boldsymbol{R}^\intercal)\, (\boldsymbol{A}-\boldsymbol{RB})\bigg)\\
+	&=& \min \mathrm{Tr}\bigg(\boldsymbol{A}^\intercal\boldsymbol{A}-2\boldsymbol{A}^\intercal\boldsymbol{RB} + \boldsymbol{B}^\intercal\boldsymbol{B}\bigg)\\
+	&=& \max \mathrm{Tr}\bigg(\boldsymbol{A}^\intercal\boldsymbol{RB}\bigg)\\
+	&=& \max \mathrm{Tr}\bigg(\boldsymbol{RB}\boldsymbol{A}^\intercal\bigg) \:\:\:\quad \text{since trace(PQ) = trace(QP)}\\
+\text{using SVD on $\boldsymbol{BA}^\intercal$}\quad \boldsymbol{BA}^\intercal &=& \boldsymbol{UDV}^\intercal\\
+&=& \max  \mathrm{Tr}\bigg(\boldsymbol{R}\boldsymbol{UDV}^\intercal\bigg)\\
+&=& \max \mathrm{Tr}\bigg(\boldsymbol{V}^\intercal\boldsymbol{RUD}\bigg)\\
+&=& \max \mathrm{Tr}\bigg(\boldsymbol{Z(R)}\boldsymbol{D}\bigg)\\
+&=& \max \sum \limits_{i} z_{ii}d_{ii} \leq \sum \limits_{i} d_{ii} \quad (\because \boldsymbol{Z(R)}^\intercal \boldsymbol{Z(R)} = \boldsymbol{I})\\
+\end{eqnarray*}
+The maximum is achieved for $\boldsymbol{Z(R)} = \boldsymbol{I}$, i.e.,
+$$\boldsymbol{R} = \boldsymbol{V} \boldsymbol{U}^\intercal$$
+
+This algorithm is used in the \textbf{Tomography under unknown angles for 3D images}, where we try to estimate the rotation matrix $\boldsymbol{R}$. This problem is also known as \textbf{Orthogonal Procrustes} problem.
+\section*{5}
+\subsection*{5.a}
+The problem of hyperspectral unmixing is defined using the following constrained convex optimization problem:
+$$\hat{\boldsymbol{s}}[n] = \arg \min \limits_{\boldsymbol{s}[n] \in \mathcal{S}} \norm{\boldsymbol{y}[n] - \boldsymbol{A} \boldsymbol{s}[n]}_2^2, \text{ such that } \sum \limits_{i=1}^N s_i[n] = 1, s_i[n] \geq 0, i=1, \ldots, N,\: n=1, \ldots ,L$$
+where 
+\begin{itemize}
+	\item $\boldsymbol{y}[n] = [y_1[n], y_2[n], \ldots, y_M[n]]^\intercal \in \mathbb{R}^M$ is a vector of hyperspectral camera measurements where $y_m[n]$ denotes the camera's measurement at spectral band $m$ and pixel $n$. There are a total of $M$ spectral bands and $L$ pixels.
+	\item $\boldsymbol{A} = [\boldsymbol{a}_1, \ldots, \boldsymbol{a}_N] \in \mathbb{R}^{M \times N}$ is called as the \textit{endmember matrix} and each $\boldsymbol{a_i}$ is called \textit{endmember signature vector} where $N$ is the total number of endmembers or the materials in the scene.
+	\item $\boldsymbol{s}[n] = [s_1[n], \ldots,s_N[n]]^\intercal \in \mathbb{R}^N$ is called the \textit{abundance vector} at pixel $n$ where $s_i[n]$ describes the contribution of material $i$ at pixel $n$.
+\end{itemize}
+\subsection*{5.b}
+We have the block model
+$$\boldsymbol{Y} = \boldsymbol{A}\boldsymbol{S}, \boldsymbol{S} \in \mathbb{R}^{K \times L}, \boldsymbol{Y} \in  \mathbb{R}^{M \times L}$$
+If $S$ denotes the set of indices of active materials in the measured data $\boldsymbol{Y}$, and if $\boldsymbol{A}_S$ denotes the matrix made from the columns of $\boldsymbol{A}$ indexed by $S$. If the set of true abundance maps $\{\boldsymbol{s}^i\}_{i \in S}$ are assumed to be linearly independent, then $\mathcal{R}(\boldsymbol{Y}) = \mathcal{R}(\boldsymbol{A}_S)$, where $\mathcal{R}$ denotes the range space of its argument. This gives us equation (40):
+$$\norm{\boldsymbol{S}}_{\text{row -- 0}} < \text{spark}(\boldsymbol{A}) - 1$$
+Here $\text{spark}(\boldsymbol{A})$ denotes the smallest number of linearly dependent columns of $\boldsymbol{A}$ and $\norm{\boldsymbol{S}}_{\text{row -- 0}}$ denotes the number of non-zero rows in $\boldsymbol{S}$. So, the problem requirements that we have are stated as follows:
+\begin{itemize}
+	\item $\boldsymbol{A} \geq 0$, $\boldsymbol{S} \geq 0$ (based on physical constraints) and $\boldsymbol{Y} = \boldsymbol{A}\boldsymbol{S}$. 
+	\item As $\mathcal{R}(\boldsymbol{Y}) = \mathcal{R}(\boldsymbol{A}_S)$, we are trying to represent the columns of $\boldsymbol{Y}$ in the basis formed using columns of $\boldsymbol{A}$.
+	\item As per the inequality mentioned above, we have $K < M$
+\end{itemize}
+All the above requirements are captured by performing NMF on $\boldsymbol{Y}$.
+
+\subsection*{5.c}
+Standard NMF may not guarantee solution uniqueness. This is a serious issue to the blind HU application, since it means that an NMF solution may not be necessarily be the true endmembers and abundances, even in the noiseless case. Hence, for the case of blind HU, NMF is modified to fit the problem better. The unified NMF-based blind HU problem can be formulated as follows:
+$$\min \limits_{\boldsymbol{A} \geq 0, \boldsymbol{S} \in \mathcal{S}^L}\norm{\boldsymbol{Y} - \boldsymbol{A} \boldsymbol{S}}_F^2 + \lambda \cdot g(\boldsymbol{A}) + \mu \cdot h(\boldsymbol{S})$$
+where $\mathcal{S}^L = \{\boldsymbol{S} | \boldsymbol{s}[n] \geq \boldsymbol{0}, \boldsymbol{1}^\intercal \boldsymbol{s}[n] = 1, 1 \leq n \leq L\}$, $g$ and $h$ are regularizers and $\lambda$ and $\mu$ are positive constants. The following two variations of blind HU are explained:
+\begin{enumerate}
+	\item \textbf{Iterated Constrained Endmember}(ICE):\newline
+	Here, $h(\boldsymbol{S}) = 0$ and 
+	$$g(\boldsymbol{A}) = \sum \limits_{i=1}^{N-1}\sum \limits_{j=i+1}^N \norm{\boldsymbol{a}_i - \boldsymbol{a}_j}_2^2$$
+	which is the sum of differences between the vertices.
+	\item \textbf{Sparsity Promoting Iterated Constrained Endmember}(SPICE):\newline
+	$$g(\boldsymbol{A}) = \sum \limits_{i=1}^{N-1}\sum \limits_{j=i+1}^N \norm{\boldsymbol{a}_i - \boldsymbol{a}_j}_2^2$$
+	$$h(\boldsymbol{S}) = \sum \limits_{i=1}^N \gamma_i \norm{\boldsymbol{s}^i}_1$$
+	Here, we promote sparsity on the columns of $\boldsymbol{S}$
+\end{enumerate}
+\end{document}

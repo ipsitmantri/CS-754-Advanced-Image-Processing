@@ -1,0 +1,43 @@
+\title{Assignment 5: CS 754, Advanced Image Processing}
+\author{}
+\date{Due: 19th April before 11:55 pm}
+
+\documentclass[11pt]{article}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{ulem}
+\usepackage[margin=0.5in]{geometry}
+\begin{document}
+\maketitle
+
+\textbf{Remember the honor code while submitting this (and every other) assignment. All members of the group should work on and \emph{understand} all parts of the assignment. We will adopt a \textbf{zero-tolerance policy} against any violation.}
+\\
+\\
+\textbf{Submission instructions:} You should ideally type out all the answers in Word (with the equation editor) or using Latex. In either case, prepare a pdf file. Create a single zip or rar file containing the report, code and sample outputs and name it as follows: A5-IdNumberOfFirstStudent-IdNumberOfSecondStudent.zip. (If you are doing the assignment alone, the name of the zip file is A5-IdNumber.zip). Upload the file on moodle BEFORE 11:55 pm on 19th April, and the cutoff time is 20th April at 10 am. \textbf{There will be no late extensions for this assignments as the cutof date is the last day of classes}. Note that only one student per group should upload their work on moodle. Please preserve a copy of all your work until the end of the semester. \emph{If you have difficulties, please do not hesitate to seek help from me.} 
+
+
+\begin{enumerate}
+
+\item Consider an inverse problem of the form $\boldsymbol{y} = \mathcal{H}(\boldsymbol{x}) + \boldsymbol{\eta}$ where $\boldsymbol{y}$ is the observed degraded and noisy image, $\boldsymbol{x}$ is the underlying image to be estimated, $\boldsymbol{\eta}$ is a noise vector, and $\mathcal{H}$ represents a transformation operator. In case of denoising, this operator is represented by the identity matrix. In case of compressed sensing, it is the sensing matrix, and in case of deblurring, it represents a convolution. The aim is to estimate $\boldsymbol{x}$ given $\boldsymbol{y}$ and $\mathcal{H}$ as well as the noise model. This is often framed as a Bayesian problem to maximize
+$p(\boldsymbol{x}|\boldsymbol{y},\mathcal{H}) \propto p(\boldsymbol{y}|\boldsymbol{x},\mathcal{H}) p(\boldsymbol{x})$. In this relation, the first term in the product on the right hand side is the likelihood term, and the second term represents a prior probability imposed on $\boldsymbol{x}$. 
+\\
+With this in mind, we refer to the paper `User assisted separation of reflections from a single image using a sparsity prior' by Anat Levin, IEEE Transactions on Pattern Analysis and Machine Intelligence. Answer the following questions: 
+\begin{itemize}
+\item In Eqn. (7), explain what $A_{j \rightarrow}$ and $b_j$ represent, for each of the four terms in Eqn. (6).
+\item In Eqn. (6), which terms are obtained from the prior and which terms are obtained from the likelihood? What is the prior used in the paper? What is the likelihood used in the paper?
+\item Why does the paper use a likelihood term that is different from the Gaussian prior? \textsf{[7+12+6=25 points]}
+\end{itemize}
+
+\item Consider compressive measurements of the form $\boldsymbol{y} = \boldsymbol{\Phi x} + \boldsymbol{\eta}$ under the usual notations with $\boldsymbol{y} \in \mathbb{R}^m, \boldsymbol{\Phi} \in \mathbb{R}^{m \times n}, m \ll n, \boldsymbol{x} \in \mathbb{R}^n, \boldsymbol{\eta} \sim \mathcal{N}(0,\sigma^2\boldsymbol{I}_{m \times m})$. Instead of the usual model of assuming signal sparsity in an orthonormal basis, consider that $\boldsymbol{x}$ is a random draw from a zero-mean Gaussian distribution with known covariance matrix $\boldsymbol{\Sigma_x}$ (of size $n \times n$). Derive an expression for the maximum a posteriori (MAP) estimate of $\boldsymbol{x}$ given $\boldsymbol{y}, \boldsymbol{\Phi}, \boldsymbol{\Sigma_x}$. Also, run the following simulation:
+Generate $\boldsymbol{\Sigma_x} = \boldsymbol{U \Lambda U}^T$ of size $128 \times 128$ where $\boldsymbol{U}$ is a random orthonormal matrix, and $\boldsymbol{\Lambda}$ is a diagonal matrix of eigenvalues of the form $c i^{-\alpha}$ where $c = 1$ is a constant, $i$ is an index for the eigenvalues with $1 \leq i \leq n$ and $\alpha$ is a decay factor for the eigenvalues. Generate 10 signals from $\mathcal{N}(\boldsymbol{0},\boldsymbol{\Sigma_x})$. For $m \in \{40,50,64,80,100,120\}$, generate compressive measurements of the form $\boldsymbol{y} = \boldsymbol{\Phi x} + \boldsymbol{\eta}$ for each signal $\boldsymbol{x}$. In each case, $\boldsymbol{\Phi}$ should be a matrix of iid Gaussian entries with mean 0 and variance $1/m$, and $\sigma = 0.01 \times$ the average absolute value in $\boldsymbol{\Phi x}$. Reconstruct $\boldsymbol{x}$ using the MAP formula, and plot the average RMSE versus $m$ for the case $\alpha = 3$ and $\alpha = 0$. Comment on the results - is there any difference in the reconstruction performance when $\alpha$ is varied? If so, what could be the reason for the difference? \textsf{[25 points]}
+
+\item Read through the proof of Theorem 3.3 from the paper `Guaranteed Minimum-Rank Solutions of Linear Matrix Equations via Nuclear Norm Minimization' from the homework folder. This theorem refers to the optimization problem in Eqn. 3.1 of the same paper. Answer all the questions highlighted within the proof. You may directly use linear algebra results quoted in the paper without proving them from scratch, but mention very clearly which result you used and where. \textsf{[12 $\times$ 2 +1 = 25 points]}
+
+\item Read section 1 of the paper `Exact Matrix Completion via Convex Optimization' from the homework folder. Answer the following questions: (1) Why do the theorems on low rank matrix completion require that the singular vectors be incoherent with the canonical basis (i.e. columns of the identity matrix)? (2) How would this coherence condition change if the sampling operator were changed to the one in Eqn. 1.13 of the paper? \textsf{[10 points]}
+
+\item Read section 5.9 of the paper `Low-Rank Modeling and Its Applications in Image Analysis' from the homework folder. You will find numerous image analysis or computer vision applications of low rank matrix modelling and/or RPCA, which we did not cover in class. Your task is to glance through any one of the papers cited in this section and answer the following: (1) State the title and venue of the paper; (2) Briefly explain the problem being solved in the paper; (3) Explain how low rank matrix recovery/completion or RPCA is being used to solve that problem. Write down the objective function being optimized in the paper with meaning of all symbols clearly explained. \textsf{[5 + 10 = 15 points]}
+
+\end{enumerate}
+\end{document}
